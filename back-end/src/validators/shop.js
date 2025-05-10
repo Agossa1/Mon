@@ -3,7 +3,7 @@ import Joi from 'joi';
 /**
  * Schéma de validation pour la création d'une boutique
  */
-export const createShopSchema = Joi.object({
+export const validatorShopInput = Joi.object({
   name: Joi.string()
     .required()
     .min(3)
@@ -200,11 +200,198 @@ export const createShopSchema = Joi.object({
  * Schéma de validation pour la mise à jour d'une boutique
  * Basé sur le schéma de création mais avec tous les champs optionnels
  */
-export const updateShopSchema = createShopSchema.fork(
-  Object.keys(createShopSchema.describe().keys).filter(key => key !== 'name' && key !== 'shopType'),
-  (schema) => schema.optional()
-);
-
+/**
+ * Schéma de validation pour la mise à jour d'une boutique
+ * Basé sur le schéma de création mais avec tous les champs optionnels
+ */
+export const updateShopSchema = Joi.object({
+  name: Joi.string()
+    .min(3)
+    .max(100)
+    .trim()
+    .optional()
+    .messages({
+      'string.base': 'Le nom doit être une chaîne de caractères',
+      'string.min': 'Le nom doit contenir au moins {#limit} caractères',
+      'string.max': 'Le nom ne peut pas dépasser {#limit} caractères'
+    }),
+  
+  description: Joi.string()
+    .max(1000)
+    .allow('')
+    .optional()
+    .messages({
+      'string.base': 'La description doit être une chaîne de caractères',
+      'string.max': 'La description ne peut pas dépasser {#limit} caractères'
+    }),
+  
+  slug: Joi.string()
+    .min(3)
+    .max(100)
+    .pattern(/^[a-z0-9-]+$/)
+    .optional()
+    .messages({
+      'string.base': 'Le slug doit être une chaîne de caractères',
+      'string.min': 'Le slug doit contenir au moins {#limit} caractères',
+      'string.max': 'Le slug ne peut pas dépasser {#limit} caractères',
+      'string.pattern.base': 'Le slug ne peut contenir que des lettres minuscules, des chiffres et des tirets'
+    }),
+  
+  shopType: Joi.string()
+    .valid('PHYSICAL', 'ONLINE', 'HYBRID')
+    .optional()
+    .messages({
+      'string.base': 'Le type de boutique doit être une chaîne de caractères',
+      'any.only': 'Le type de boutique doit être PHYSICAL, ONLINE ou HYBRID'
+    }),
+  
+  category: Joi.string()
+    .optional()
+    .messages({
+      'string.base': 'La catégorie doit être une chaîne de caractères'
+    }),
+  
+  subCategory: Joi.string()
+    .optional()
+    .allow('')
+    .messages({
+      'string.base': 'La sous-catégorie doit être une chaîne de caractères'
+    }),
+  
+  logo: Joi.string()
+    .uri()
+    .optional()
+    .allow('')
+    .messages({
+      'string.base': 'Le logo doit être une chaîne de caractères',
+      'string.uri': 'Le logo doit être une URL valide'
+    }),
+  
+  coverImage: Joi.string()
+    .uri()
+    .optional()
+    .allow('')
+    .messages({
+      'string.base': 'L\'image de couverture doit être une chaîne de caractères',
+      'string.uri': 'L\'image de couverture doit être une URL valide'
+    }),
+  
+  contactEmail: Joi.string()
+    .email()
+    .optional()
+    .allow('')
+    .messages({
+      'string.base': 'L\'email de contact doit être une chaîne de caractères',
+      'string.email': 'L\'email de contact doit être une adresse email valide'
+    }),
+  
+  contactPhone: Joi.string()
+    .pattern(/^(\+\d{1,3}[- ]?)?\d{9,15}$/)
+    .optional()
+    .allow('')
+    .messages({
+      'string.base': 'Le téléphone de contact doit être une chaîne de caractères',
+      'string.pattern.base': 'Le téléphone de contact doit être un numéro de téléphone valide'
+    }),
+  
+  website: Joi.string()
+    .uri()
+    .optional()
+    .allow('')
+    .messages({
+      'string.base': 'Le site web doit être une chaîne de caractères',
+      'string.uri': 'Le site web doit être une URL valide'
+    }),
+  
+  socialLinks: Joi.object({
+    facebook: Joi.string().uri().optional().allow(''),
+    instagram: Joi.string().uri().optional().allow(''),
+    twitter: Joi.string().uri().optional().allow(''),
+    linkedin: Joi.string().uri().optional().allow(''),
+    youtube: Joi.string().uri().optional().allow(''),
+    tiktok: Joi.string().uri().optional().allow('')
+  })
+    .optional()
+    .messages({
+      'object.base': 'Les liens sociaux doivent être un objet'
+    }),
+  
+  address: Joi.object({
+    street: Joi.string().optional().allow(''),
+    city: Joi.string().optional(),
+    state: Joi.string().optional().allow(''),
+    postalCode: Joi.string().optional().allow(''),
+    country: Joi.string().optional()
+  })
+    .optional()
+    .messages({
+      'object.base': 'L\'adresse doit être un objet'
+    }),
+  
+  businessHours: Joi.object({
+    monday: Joi.object({
+      open: Joi.boolean().default(true),
+      openingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
+      closingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional()
+    }).optional(),
+    tuesday: Joi.object({
+      open: Joi.boolean().default(true),
+      openingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
+      closingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional()
+    }).optional(),
+    wednesday: Joi.object({
+      open: Joi.boolean().default(true),
+      openingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
+      closingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional()
+    }).optional(),
+    thursday: Joi.object({
+      open: Joi.boolean().default(true),
+      openingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
+      closingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional()
+    }).optional(),
+    friday: Joi.object({
+      open: Joi.boolean().default(true),
+      openingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
+      closingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional()
+    }).optional(),
+    saturday: Joi.object({
+      open: Joi.boolean().default(true),
+      openingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
+      closingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional()
+    }).optional(),
+    sunday: Joi.object({
+      open: Joi.boolean().default(false),
+      openingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
+      closingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional()
+    }).optional()
+  })
+    .optional()
+    .messages({
+      'object.base': 'Les horaires d\'ouverture doivent être un objet'
+    }),
+  
+  tags: Joi.array()
+    .items(Joi.string().max(30))
+    .max(10)
+    .optional()
+    .messages({
+      'array.base': 'Les tags doivent être un tableau',
+      'array.max': 'Vous ne pouvez pas ajouter plus de {#limit} tags',
+      'string.max': 'Un tag ne peut pas dépasser {#limit} caractères'
+    }),
+  
+  settings: Joi.object({
+    allowReviews: Joi.boolean().default(true),
+    showContactInfo: Joi.boolean().default(true),
+    showBusinessHours: Joi.boolean().default(true),
+    showSocialLinks: Joi.boolean().default(true),
+    allowMessages: Joi.boolean().default(true)
+  })
+    .optional()
+    .messages({
+      'object.base': 'Les paramètres doivent être un objet'
+    })
+});
 /**
  * Schéma de validation pour le changement de statut d'une boutique
  */

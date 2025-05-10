@@ -17,7 +17,9 @@ dotenv.config();
 
 import AdminRoutes from "./src/routes/AdminRoutes.js";
 
+
 import {authRoutes} from "./src/routes/authRoutes.js";
+import {sellerRoutes} from "./src/routes/sellerRoutes.js";
 
 // Configuration ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -140,6 +142,7 @@ app.use('/api/users/users', (req, res, next) => {
 // Routes
 app.use('/api/users', authRoutes)
 app.use('/api/admin', AdminRoutes)
+app.use('/api/shops', sellerRoutes)
 
 // Route 404 pour les chemins non trouvés
 app.use((req, res) => {
