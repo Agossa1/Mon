@@ -1,0 +1,4 @@
+{"level":"info","message":"Clé PASETO chargée depuis le fichier","path":"/Volumes/Untitled/MonAppEcommerce/paseto_local_key","timestamp":"2025-05-01 05:48:58"}
+{"level":"info","message":"Prisma Info Starting a postgresql pool with 21 connections.","target":"quaint::pooled","timestamp":"2025-05-01 05:48:58"}
+{"level":"info","message":"Successfully connected to the database","timestamp":"2025-05-01 05:48:58"}
+{"level":"info","message":"🚀 Serveur démarré sur http://localhost:4000","timestamp":"2025-05-01 05:48:58"}

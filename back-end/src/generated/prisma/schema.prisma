@@ -1,0 +1,917 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model OTP {
+  id        String   @id @default(cuid())
+  userId    String
+  code      String
+  type      String // EMAIL_VERIFICATION, PHONE_VERIFICATION, PASSWORD_RESET, etc.
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  used      Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  fullName      String?
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  phone         String?   @unique
+  phoneVerified Boolean   @default(false)
+  password      String
+  role          Role      @default(USER)
+  loginAttempts Int       @default(0)
+  lockedUntil   DateTime?
+  lastLogin     DateTime?
+
+  // Relations
+  otp             OTP[]
+  profile         Profile?
+  shops           Shop[]
+  reviews         Review[]
+  orders          Order[]
+  cart            Cart?
+  wishlist        WishlistItem[]
+  addresses       Address[]
+  paymentMethods  PaymentMethod[]
+  notifications   Notification[]
+  followedShops   Shop[]                    @relation("ShopFollowers")
+  sentMessages    Message[]
+  conversations   ConversationParticipant[]
+  shopMemberships ShopMember[]
+  // Audit
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+}
+
+model Profile {
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bio         String?   @db.Text
+  avatar      String? // Photo de profil
+  coverImage  String?
+  address     String?
+  city        String?
+  state       String?
+  postalCode  String?
+  country     String?
+  countryCode String? // Code du pays pour le téléphone
+  phoneNumber String? // Numéro de téléphone complet
+  dateOfBirth DateTime?
+  gender      Gender?
+  website     String?
+  socialLinks Json? // Pour stocker des liens vers les réseaux sociaux
+  preferences Json? // Pour stocker les préférences utilisateur
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Address {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name             String // Nom de l'adresse (ex: "Domicile", "Bureau")
+  recipientName    String // Nom du destinataire
+  street           String
+  streetComplement String?
+  city             String
+  state            String?
+  postalCode       String?
+  country          String
+  phoneNumber      String?
+  isDefault        Boolean  @default(false)
+  coordinates      Json? // Coordonnées géographiques {lat, lng}
+  instructions     String?  @db.Text // Instructions de livraison
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  orders Order[]
+}
+
+model PaymentMethod {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type          String // CREDIT_CARD, MOBILE_MONEY, BANK_TRANSFER, etc.
+  provider      String // Nom du fournisseur (Visa, MTN, etc.)
+  accountNumber String? // Numéro masqué (ex: "XXXX-XXXX-XXXX-1234")
+  expiryDate    DateTime? // Pour les cartes de crédit
+  isDefault     Boolean   @default(false)
+  metadata      Json? // Métadonnées spécifiques au mode de paiement
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  transactions Transaction[]
+}
+
+model Category {
+  id           String     @id @default(cuid())
+  name         String
+  slug         String     @unique
+  description  String?    @db.Text
+  icon         String?
+  image        String?
+  parentId     String?
+  parent       Category?  @relation("SubCategories", fields: [parentId], references: [id])
+  children     Category[] @relation("SubCategories")
+  featured     Boolean    @default(false)
+  displayOrder Int        @default(0)
+
+  // Relations
+  products Product[] @relation("ProductCategories")
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id               String  @id @default(cuid())
+  name             String
+  slug             String  @unique
+  description      String? @db.Text
+  shortDescription String? @db.VarChar(255)
+  price            Float
+  compareAtPrice   Float? // Prix barré (avant réduction)
+  costPrice        Float? // Prix d'achat (pour calcul de marge)
+  sku              String? // Stock Keeping Unit
+  barcode          String? // Code-barres (EAN, UPC, etc.)
+
+  // Gestion du stock
+  inventory         Int     @default(0)
+  lowStockThreshold Int?    @default(5)
+  trackInventory    Boolean @default(true)
+
+  // Caractéristiques du produit
+  weight     Float? // Poids en grammes
+  dimensions Json? // {length, width, height} en cm
+
+  // Médias
+  images Json[] // [{url, alt, position}]
+  videos Json[] // [{url, thumbnail, position}]
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  metaKeywords    String?
+
+  // Statut et visibilité
+  status     ProductStatus     @default(DRAFT)
+  visibility ProductVisibility @default(VISIBLE)
+  featured   Boolean           @default(false)
+
+  // Boutique
+  shopId String
+  shop   Shop   @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  // Caractéristiques
+  brand           String?
+  manufacturer    String?
+  countryOfOrigin String?
+  warrantyInfo    String? @db.Text
+
+  // Attributs et variantes
+  hasVariants Boolean @default(false)
+  attributes  Json? // [{name, value}]
+
+  // Statistiques
+  rating      Float? @default(0)
+  reviewCount Int    @default(0)
+  salesCount  Int    @default(0)
+  viewCount   Int    @default(0)
+
+  // Relations
+  categories       Category[]        @relation("ProductCategories")
+  variants         ProductVariant[]
+  reviews          Review[]
+  orderItems       OrderItem[]
+  cartItems        CartItem[]
+  wishlistItems    WishlistItem[]
+  inventoryItems   Inventory[]       @relation("ProductInventory")
+  supplierProducts SupplierProduct[]
+  // Audit
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model ProductVariant {
+  id             String  @id @default(cuid())
+  productId      String
+  product        Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name           String?
+  sku            String?
+  barcode        String?
+  price          Float
+  compareAtPrice Float?
+  inventory      Int     @default(0)
+  images         Json[] // [{url, alt, position}]
+  attributes     Json // [{name, value}] (ex: {"color": "red", "size": "XL"})
+
+  // Relations
+  orderItems     OrderItem[]
+  cartItems      CartItem[]
+  inventoryItems Inventory[] @relation("VariantInventory")
+  // Audit
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model Cart {
+  id             String     @id @default(cuid())
+  userId         String     @unique
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items          CartItem[]
+  subtotal       Float      @default(0)
+  discountTotal  Float      @default(0)
+  taxTotal       Float      @default(0)
+  shippingTotal  Float      @default(0)
+  total          Float      @default(0)
+  couponCode     String?
+  couponDiscount Float?     @default(0)
+  notes          String?    @db.Text
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CartItem {
+  id        String          @id @default(cuid())
+  cartId    String
+  cart      Cart            @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  variantId String?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
+  quantity  Int             @default(1)
+  price     Float // Prix unitaire au moment de l'ajout
+  total     Float // Prix total (quantité × prix)
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WishlistItem {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  // Audit
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId]) // Un utilisateur ne peut ajouter un produit qu'une seule fois
+}
+
+model Order {
+  id          String @id @default(cuid())
+  orderNumber String @unique // Numéro de commande lisible (ex: ORD-12345)
+  userId      String
+  user        User   @relation(fields: [userId], references: [id])
+
+  // Montants
+  subtotal      Float
+  discountTotal Float @default(0)
+  taxTotal      Float @default(0)
+  shippingTotal Float @default(0)
+  total         Float
+
+  // Statut
+  status            OrderStatus       @default(PENDING)
+  paymentStatus     PaymentStatus     @default(PENDING)
+  fulfillmentStatus FulfillmentStatus @default(UNFULFILLED)
+
+  // Adresse
+  addressId       String?
+  address         Address? @relation(fields: [addressId], references: [id])
+  shippingAddress Json? // Copie de l'adresse au moment de la commande
+
+  // Livraison
+  shippingMethod    String?
+  shippingCarrier   String?
+  trackingNumber    String?
+  estimatedDelivery DateTime?
+
+  // Paiement
+  paymentMethod String?
+  transactionId String?
+
+  // Informations supplémentaires
+  notes         String? @db.Text
+  customerNotes String? @db.Text
+  couponCode    String?
+
+  // Relations
+  items        OrderItem[]
+  transactions Transaction[]
+  shopId       String?
+  shop         Shop?         @relation(fields: [shopId], references: [id])
+
+  // Audit
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id        String          @id @default(cuid())
+  orderId   String
+  order     Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product         @relation(fields: [productId], references: [id])
+  variantId String?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
+
+  // Informations produit au moment de la commande
+  name     String
+  sku      String?
+  price    Float
+  quantity Int
+  total    Float
+  weight   Float?
+  options  Json? // Options sélectionnées
+  metadata Json? // Métadonnées supplémentaires
+
+  // Statut
+  fulfillmentStatus FulfillmentStatus @default(UNFULFILLED)
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id              String         @id @default(cuid())
+  orderId         String
+  order           Order          @relation(fields: [orderId], references: [id])
+  paymentMethodId String?
+  paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
+
+  // Détails de la transaction
+  amount          Float
+  currency        String            @default("EUR")
+  status          TransactionStatus @default(PENDING)
+  type            TransactionType
+  reference       String? // Référence externe
+  gateway         String // Passerelle de paiement utilisée
+  gatewayResponse Json? // Réponse brute de la passerelle
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  // Contenu
+  rating  Int // 1-5
+  title   String?
+  comment String? @db.Text
+  images  Json[] // [{url, alt}]
+
+  // Modération
+  status            ReviewStatus @default(PENDING)
+  moderationComment String?      @db.Text
+
+  // Statistiques
+  helpfulCount Int @default(0)
+  reportCount  Int @default(0)
+
+  // Vérification
+  isVerifiedPurchase Boolean @default(false)
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, productId]) // Un utilisateur ne peut laisser qu'un avis par produit
+}
+
+model Notification {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Contenu
+  type    String // ORDER_STATUS, PRODUCT_RESTOCK, PRICE_DROP, etc.
+  title   String
+  message String  @db.Text
+  image   String?
+  link    String?
+
+  // Statut
+  read   Boolean   @default(false)
+  readAt DateTime?
+
+  // Métadonnées
+  metadata Json? // Données supplémentaires spécifiques au type
+
+  // Audit
+  createdAt DateTime @default(now())
+}
+
+model Shop {
+  id               String   @id @default(cuid())
+  name             String // Nom commercial de la boutique
+  slug             String   @unique // URL conviviale (ex: ma-boutique)
+  shopType         ShopType // Type d'entité commerciale
+  description      String?  @db.Text // Description détaillée
+  shortDescription String?  @db.VarChar(255) // Description courte pour les aperçus
+
+  // Identité visuelle
+  logo   String? // Logo de la boutique
+  banner String? // Bannière pour la page de la boutique
+  colors Json? // Couleurs de la marque (primaire, secondaire, etc.)
+
+  // Catégorisation
+  category      ShopCategory // Catégorie principale
+  subCategories String[] // Sous-catégories (tableau)
+  tags          String[] // Tags pour la recherche
+
+  // Propriétaire
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // Équipe
+  teamMembers Json? // Liste des membres de l'équipe et leurs rôles
+
+  // Identité du propriétaire/responsable
+  firstName        String
+  lastName         String
+  dateOfBirth      DateTime?
+  identityType     IdentityType?
+  identityNumber   String? // Numéro de la pièce d'identité
+  identityDocument String? // URL du document téléchargé
+  identityVerified Boolean       @default(false) // Vérification de l'identité
+
+  // Informations commerciales
+  businessName       String? // Raison sociale
+  taxId              String? // Numéro d'identification fiscale
+  registrationNumber String? // Numéro d'immatriculation
+  businessDocument   String? // URL du document d'immatriculation
+  businessVerified   Boolean @default(false) // Vérification des documents commerciaux
+
+  // Coordonnées
+  email       String // Email de contact
+  phone       String? // Téléphone de contact
+  website     String? // Site web externe
+  socialMedia Json? // Liens vers les réseaux sociaux
+
+  // Adresse
+  address     String?
+  city        String?
+  state       String?
+  postalCode  String?
+  country     String?
+  coordinates Json? // Coordonnées géographiques {lat, lng}
+
+  // Paramètres de la boutique
+  currency  String   @default("EUR")
+  languages String[] @default(["fr"])
+  timeZone  String   @default("Europe/Paris")
+
+  // Paramètres de livraison
+  shippingMethods Json? // Méthodes de livraison proposées
+  shippingZones   Json? // Zones de livraison et tarifs
+
+  // Paramètres de paiement
+  paymentMethods Json? // Méthodes de paiement acceptées
+  bankAccount    Json? // Informations bancaires pour les versements
+
+  // Statistiques
+  rating        Float? @default(0)
+  reviewCount   Int    @default(0)
+  salesCount    Int    @default(0)
+  productCount  Int    @default(0)
+  followerCount Int    @default(0)
+
+  // Statut
+  status   ShopStatus @default(PENDING)
+  featured Boolean    @default(false)
+  verified Boolean    @default(false)
+
+  // Relations
+  products      Product[]
+  orders        Order[]
+  followers     User[]           @relation("ShopFollowers")
+  coupons       Coupon[]
+  members       ShopMember[]
+  invitations   ShopInvitation[]
+  inventories   Inventory[]
+  suppliers     Supplier[]
+  conversations Conversation[]
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Coupon {
+  id          String  @id @default(cuid())
+  code        String  @unique
+  description String? @db.Text
+
+  // Type et valeur
+  type  CouponType // PERCENTAGE, FIXED_AMOUNT, FREE_SHIPPING
+  value Float // Montant ou pourcentage de réduction
+
+  // Restrictions
+  minOrderAmount Float? // Montant minimum de commande
+  maxUsage       Int? // Nombre maximum d'utilisations
+  usageCount     Int    @default(0)
+  perUserLimit   Int? // Limite d'utilisation par utilisateur
+
+  // Validité
+  startDate DateTime?
+  endDate   DateTime?
+
+  // Ciblage
+  shopId      String? // Si null, applicable à toutes les boutiques
+  shop        Shop?    @relation(fields: [shopId], references: [id])
+  productIds  String[] // IDs des produits concernés (vide = tous)
+  categoryIds String[] // IDs des catégories concernées (vide = toutes)
+
+  // Statut
+  active Boolean @default(true)
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Système de messagerie
+model Conversation {
+  id        String           @id @default(cuid())
+  title     String?
+  type      ConversationType @default(DIRECT)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  // Relations
+  participants ConversationParticipant[]
+  messages     Message[]
+  shopId       String?
+  shop         Shop?                     @relation(fields: [shopId], references: [id])
+}
+
+model ConversationParticipant {
+  id             String          @id @default(cuid())
+  conversationId String
+  conversation   Conversation    @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           ParticipantRole @default(MEMBER)
+  joinedAt       DateTime        @default(now())
+  leftAt         DateTime?
+  isActive       Boolean         @default(true)
+  lastReadAt     DateTime?
+
+  @@unique([conversationId, userId])
+}
+
+model Message {
+  id             String        @id @default(cuid())
+  conversationId String
+  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User          @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  content        String        @db.Text
+  attachments    Json? // [{type, url, name, size}]
+  readBy         Json? // [{userId, readAt}]
+  status         MessageStatus @default(SENT)
+  sentAt         DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+  isDeleted      Boolean       @default(false)
+  replyToId      String?
+  replyTo        Message?      @relation("MessageReplies", fields: [replyToId], references: [id])
+  replies        Message[]     @relation("MessageReplies")
+}
+
+// Gestion des rôles dans la boutique
+model ShopMember {
+  id          String   @id @default(cuid())
+  shopId      String
+  shop        Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role        ShopRole
+  isActive    Boolean  @default(true)
+  joinedAt    DateTime @default(now())
+  invitedBy   String? // ID de l'utilisateur qui a invité ce membre
+  permissions Json? // Permissions spécifiques supplémentaires
+
+  @@unique([shopId, userId])
+}
+
+model ShopInvitation {
+  id        String           @id @default(cuid())
+  shopId    String
+  shop      Shop             @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  email     String
+  role      ShopRole
+  token     String           @unique
+  expiresAt DateTime
+  invitedBy String // ID de l'utilisateur qui a envoyé l'invitation
+  status    InvitationStatus @default(PENDING)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
+
+// Gestion avancée des stocks
+model Inventory {
+  id        String          @id @default(cuid())
+  shopId    String
+  shop      Shop            @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  productId String?
+  product   Product?        @relation("ProductInventory", fields: [productId], references: [id], onDelete: SetNull)
+  variantId String?
+  variant   ProductVariant? @relation("VariantInventory", fields: [variantId], references: [id], onDelete: SetNull)
+
+  // Informations de stock
+  sku      String?
+  barcode  String?
+  quantity Int     @default(0)
+  location String? // Emplacement physique (ex: "Entrepôt A, Étagère 3")
+
+  // Alertes et seuils
+  lowStockThreshold Int?
+  notifyOnLowStock  Boolean @default(true)
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  movements InventoryMovement[]
+}
+
+model InventoryMovement {
+  id          String    @id @default(cuid())
+  inventoryId String
+  inventory   Inventory @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+
+  // Détails du mouvement
+  type      MovementType
+  quantity  Int // Positif pour entrée, négatif pour sortie
+  reason    String?
+  reference String? // Référence externe (ex: numéro de commande)
+
+  // Métadonnées
+  metadata Json?
+
+  // Audit
+  performedBy String? // ID de l'utilisateur qui a effectué l'opération
+  createdAt   DateTime @default(now())
+}
+
+model Supplier {
+  id          String  @id @default(cuid())
+  shopId      String
+  shop        Shop    @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  name        String
+  contactName String?
+  email       String?
+  phone       String?
+  address     String?
+  city        String?
+  state       String?
+  postalCode  String?
+  country     String?
+  website     String?
+  notes       String? @db.Text
+  isActive    Boolean @default(true)
+
+  // Relations
+  products SupplierProduct[]
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SupplierProduct {
+  id         String   @id @default(cuid())
+  supplierId String
+  supplier   Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  // Informations spécifiques au fournisseur
+  supplierSku String?
+  costPrice   Float?
+  minOrderQty Int?
+  leadTime    Int? // Délai de livraison en jours
+  isPreferred Boolean @default(false)
+  notes       String? @db.Text
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([supplierId, productId])
+}
+
+// Énumérations supplémentaires
+enum ConversationType {
+  DIRECT // Conversation entre deux utilisateurs
+  GROUP // Conversation de groupe
+  SUPPORT // Conversation avec le support
+  SHOP // Conversation liée à une boutique
+}
+
+enum ParticipantRole {
+  OWNER // Propriétaire de la conversation
+  ADMIN // Administrateur
+  MEMBER // Membre standard
+  GUEST // Invité avec accès limité
+}
+
+enum MessageStatus {
+  SENDING // En cours d'envoi
+  SENT // Envoyé
+  DELIVERED // Livré
+  READ // Lu
+  FAILED // Échec d'envoi
+}
+
+enum ShopRole {
+  OWNER // Propriétaire (tous les droits)
+  MANAGER // Gestionnaire (presque tous les droits)
+  INVENTORY // Gestionnaire des stocks
+  ORDERS // Gestionnaire des commandes
+  MARKETING // Responsable marketing
+  SUPPORT // Service client
+  CONTENT // Gestionnaire de contenu
+  VIEWER // Visualisation uniquement
+}
+
+enum InvitationStatus {
+  PENDING // En attente de réponse
+  ACCEPTED // Acceptée
+  DECLINED // Refusée
+  EXPIRED // Expirée
+  CANCELLED // Annulée
+}
+
+enum MovementType {
+  PURCHASE // Achat auprès d'un fournisseur
+  SALE // Vente à un client
+  RETURN // Retour client
+  ADJUSTMENT // Ajustement manuel
+  TRANSFER // Transfert entre emplacements
+  LOSS // Perte ou dommage
+  PRODUCTION // Production interne
+  INITIAL // Stock initial
+}
+
+// Énumérations
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  PREFER_NOT_TO_SAY
+}
+
+enum Role {
+  USER
+  ADMIN
+  SELLER
+  MODERATOR
+  SUPPORT
+}
+
+enum ShopType {
+  INDIVIDUAL // Personne physique
+  COMPANY // Personne morale (SARL, SA, etc.)
+  FREELANCER // Auto-entrepreneur
+  ORGANIZATION // ONG, Association, Coopérative, etc.
+}
+
+enum IdentityType {
+  NATIONAL_ID // Carte d'identité nationale
+  PASSPORT // Passeport
+  DRIVER_LICENSE // Permis de conduire
+  RESIDENCE_CARD // Carte de séjour
+  TAX_CARD // Carte fiscale
+  OTHER // Autre type de document
+}
+
+enum ShopStatus {
+  PENDING // En attente de vérification
+  ACTIVE // Boutique active
+  SUSPENDED // Temporairement suspendue
+  BANNED // Définitivement bannie
+  INACTIVE // Désactivée par le propriétaire
+}
+
+enum ShopCategory {
+  ELECTRONICS // Électronique
+  FASHION // Mode et vêtements
+  HOME // Maison et décoration
+  BEAUTY // Beauté et soins personnels
+  FOOD // Alimentation
+  HEALTH // Santé et bien-être
+  SPORTS // Sports et loisirs
+  BOOKS // Livres et médias
+  SERVICES // Services
+  OTHER // Autre catégorie
+}
+
+enum ProductStatus {
+  DRAFT // Brouillon
+  ACTIVE // Actif
+  ARCHIVED // Archivé
+  OUT_OF_STOCK // Épuisé
+}
+
+enum ProductVisibility {
+  VISIBLE // Visible pour tous
+  HIDDEN // Caché
+  FEATURED // Mis en avant
+  SEARCH_ONLY // Visible uniquement via la recherche
+}
+
+enum OrderStatus {
+  PENDING // En attente
+  PROCESSING // En cours de traitement
+  COMPLETED // Terminée
+  CANCELLED // Annulée
+  REFUNDED // Remboursée
+  ON_HOLD // En attente de vérification
+}
+
+enum PaymentStatus {
+  PENDING // En attente
+  PAID // Payé
+  PARTIALLY_PAID // Partiellement payé
+  REFUNDED // Remboursé
+  PARTIALLY_REFUNDED // Partiellement remboursé
+  FAILED // Échec
+}
+
+enum FulfillmentStatus {
+  UNFULFILLED // Non traitée
+  PARTIALLY_FULFILLED // Partiellement traitée
+  FULFILLED // Traitée
+  SHIPPED // Expédiée
+  DELIVERED // Livrée
+  RETURNED // Retournée
+  EXCHANGE // Échange
+}
+
+enum TransactionStatus {
+  PENDING // En attente
+  COMPLETED // Terminée
+  FAILED // Échouée
+  REFUNDED // Remboursée
+  CANCELLED // Annulée
+  AUTHORIZED // Autorisée mais non capturée
+  CAPTURED // Capturée
+  DISPUTED // Contestée
+  EXPIRED // Expirée
+}
+
+enum TransactionType {
+  PAYMENT // Paiement standard
+  REFUND // Remboursement
+  CAPTURE // Capture d'un paiement autorisé
+  AUTHORIZATION // Autorisation de paiement
+  VOID // Annulation d'une autorisation
+  FEE // Frais de service
+  TRANSFER // Transfert entre comptes
+}
+
+enum ReviewStatus {
+  PENDING // En attente de modération
+  APPROVED // Approuvé et publié
+  REJECTED // Rejeté
+  FLAGGED // Signalé pour examen
+}
+
+enum CouponType {
+  PERCENTAGE // Réduction en pourcentage
+  FIXED_AMOUNT // Réduction d'un montant fixe
+  FREE_SHIPPING // Livraison gratuite
+  BUY_X_GET_Y // Achetez X, obtenez Y
+  FIRST_ORDER // Réduction première commande
+}

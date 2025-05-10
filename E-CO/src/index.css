@@ -1,0 +1,95 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'tailwindcss';
+@import 'tailwindcss';
+@import 'tailwindcss/utilities';
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap');
+
+/* Vos autres styles CSS ici */
+
+/* Styles de base */
+.amazon-header {
+  font-size: 14px;
+}
+
+.navbar-brand {
+  font-size: 24px;
+}
+
+.nav-link {
+  font-size: 14px;
+}
+
+/* Styles pour les écrans de petite taille (mobile) */
+@media (max-width: 767px) {
+  .amazon-header .navbar-brand {
+    font-size: 20px;
+  }
+
+  .amazon-header .container-fluid {
+    flex-wrap: wrap;
+  }
+
+  .amazon-header .d-flex.align-items-center.flex-grow-1 {
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+
+  .amazon-header .search-container {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .amazon-header .dropdown,
+  .amazon-header .me-3 {
+    margin: 5px 0;
+  }
+
+  .amazon-header .navbar-nav {
+    flex-direction: column;
+  }
+
+  .amazon-header .nav-item {
+    margin: 5px 0;
+  }
+}
+
+/* Styles pour les écrans de taille moyenne (tablette) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .amazon-header .navbar-brand {
+    font-size: 22px;
+  }
+
+  .amazon-header .nav-link {
+    font-size: 12px;
+  }
+
+  .amazon-header .dropdown,
+  .amazon-header .me-3 {
+    margin: 0 5px;
+  }
+}
+
+/* Styles pour les grands écrans */
+@media (min-width: 992px) {
+  .amazon-header .container-fluid {
+    padding: 0 15px;
+  }
+
+  .amazon-header .navbar-nav {
+    flex-wrap: wrap;
+  }
+
+  .amazon-header .nav-item {
+    margin-right: 10px;
+  }
+}
+
+/* Ajustements pour l'offcanvas */
+.offcanvas {
+  width: 80%;
+  max-width: 300px;
+}
+
+.offcanvas-body .nav-link {
+  font-size: 16px;
+}

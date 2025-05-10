@@ -1,0 +1,55 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Volumes/Untitled/MonAppEcommerce/back-end/logs/.456ba0e6417678908c1a54eed2b457aedc6dddaa-audit.json",
+    "files": [
+        {
+            "date": 1746047018800,
+            "name": "/Volumes/Untitled/MonAppEcommerce/back-end/logs/application-2025-04-30.log",
+            "hash": "f96fbd521cde464d58c742f43505412e5a560a407336acace573a0cdd918e9b2"
+        },
+        {
+            "date": 1746074937974,
+            "name": "/Volumes/Untitled/MonAppEcommerce/back-end/logs/application-2025-05-01.log",
+            "hash": "30a090e90cb742740203ddc1d0487b33c068c0a4e0bbeed04121b883288a134d"
+        },
+        {
+            "date": 1746298872650,
+            "name": "/Volumes/Untitled/MonAppEcommerce/back-end/logs/application-2025-05-03.log",
+            "hash": "6d44a4e777b6231fbdbd4db73a94ea312b75dac1fd3fb005039080b27d95c2ad"
+        },
+        {
+            "date": 1746359835632,
+            "name": "/Volumes/Untitled/MonAppEcommerce/back-end/logs/application-2025-05-04.log",
+            "hash": "cb6cac6cbffd5881fa4c337033e5bdbda1fe665334625679c33ee41e59fceb84"
+        },
+        {
+            "date": 1746422128743,
+            "name": "/Volumes/Untitled/MonAppEcommerce/back-end/logs/application-2025-05-05.log",
+            "hash": "37af1c6a42d5398fd46d88a38f754add542765f89d231b64a4c937ab1b24ab64"
+        },
+        {
+            "date": 1746518239511,
+            "name": "/Volumes/Untitled/MonAppEcommerce/back-end/logs/application-2025-05-06.log",
+            "hash": "664d3eee71ce040bde4a0c4c166f4163104cd178401186ea92bfab8b699d83dc"
+        },
+        {
+            "date": 1746636211796,
+            "name": "/Volumes/Untitled/MonAppEcommerce/back-end/logs/application-2025-05-07.log",
+            "hash": "20935f3a78fe98c3266cb748a4a720daf04034cc1ddc5ef81664dd3682e6539b"
+        },
+        {
+            "date": 1746781124556,
+            "name": "/Volumes/Untitled/MonAppEcommerce/back-end/logs/application-2025-05-09.log",
+            "hash": "1503382ec34e27848967f2fa0139a715d04a1da9227ae2fa8115764fca4805fb"
+        },
+        {
+            "date": 1746869472583,
+            "name": "/Volumes/Untitled/MonAppEcommerce/back-end/logs/application-2025-05-10.log",
+            "hash": "760ff97eaa4661a1732e8463dd59f5ff26bb331039d568afff804e633e89d5a9"
+        }
+    ],
+    "hashType": "sha256"
+}

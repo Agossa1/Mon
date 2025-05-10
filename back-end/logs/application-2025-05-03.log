@@ -1,0 +1,95 @@
+{"level":"info","message":"Clé PASETO chargée depuis le fichier","path":"/Volumes/Untitled/MonAppEcommerce/paseto_local_key","timestamp":"2025-05-03 20:01:12"}
+{"level":"info","message":"Prisma Info Starting a postgresql pool with 21 connections.","target":"quaint::pooled","timestamp":"2025-05-03 20:01:12"}
+{"level":"info","message":"Successfully connected to the database","timestamp":"2025-05-03 20:01:12"}
+{"level":"info","message":"🚀 Serveur démarré sur http://localhost:4000","timestamp":"2025-05-03 20:01:12"}
+{"level":"info","message":"Clé PASETO chargée depuis le fichier","path":"/Volumes/Untitled/MonAppEcommerce/paseto_local_key","timestamp":"2025-05-03 20:56:39"}
+{"level":"info","message":"Prisma Info Starting a postgresql pool with 21 connections.","target":"quaint::pooled","timestamp":"2025-05-03 20:56:39"}
+{"level":"info","message":"Successfully connected to the database","timestamp":"2025-05-03 20:56:39"}
+{"level":"info","message":"🚀 Serveur démarré sur http://localhost:4000","timestamp":"2025-05-03 20:56:39"}
+{"level":"info","message":"Clé PASETO chargée depuis le fichier","path":"/Volumes/Untitled/MonAppEcommerce/paseto_local_key","timestamp":"2025-05-03 20:57:58"}
+{"level":"info","message":"Prisma Info Starting a postgresql pool with 21 connections.","target":"quaint::pooled","timestamp":"2025-05-03 20:57:58"}
+{"level":"info","message":"Successfully connected to the database","timestamp":"2025-05-03 20:57:58"}
+{"level":"info","message":"🚀 Serveur démarré sur http://localhost:4000","timestamp":"2025-05-03 20:57:58"}
+{"level":"info","message":"Disconnected from the database due to application termination","timestamp":"2025-05-03 20:58:09"}
+{"level":"info","message":"Clé PASETO chargée depuis le fichier","path":"/Volumes/Untitled/MonAppEcommerce/paseto_local_key","timestamp":"2025-05-03 20:58:11"}
+{"level":"info","message":"Prisma Info Starting a postgresql pool with 21 connections.","target":"quaint::pooled","timestamp":"2025-05-03 20:58:11"}
+{"level":"info","message":"Successfully connected to the database","timestamp":"2025-05-03 20:58:11"}
+{"level":"info","message":"🚀 Serveur démarré sur http://localhost:4000","timestamp":"2025-05-03 20:58:11"}
+{"level":"info","message":"Clé PASETO chargée depuis le fichier","path":"/Volumes/Untitled/MonAppEcommerce/paseto_local_key","timestamp":"2025-05-03 20:58:25"}
+{"level":"info","message":"Prisma Info Starting a postgresql pool with 21 connections.","target":"quaint::pooled","timestamp":"2025-05-03 20:58:25"}
+{"level":"info","message":"Successfully connected to the database","timestamp":"2025-05-03 20:58:25"}
+{"level":"info","message":"🚀 Serveur démarré sur http://localhost:4000","timestamp":"2025-05-03 20:58:25"}
+{"ip":"::1","level":"info","message":"Requête entrante","method":"POST","timestamp":"2025-05-03 21:00:04","url":"/api/users/register","userAgent":"Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1"}
+{"email":"ayemanagossa@gmail.com","ip":"::1","level":"info","message":"Tentative d'inscription avec un email déjà utilisé","timestamp":"2025-05-03 21:00:04"}
+{"level":"error","message":"::1 - - [03/May/2025:20:00:04 +0000] \"POST /api/users/register HTTP/1.1\" 409 102 \"http://localhost:5173/\" \"Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1\"","timestamp":"2025-05-03 21:00:04"}
+{"ip":"::1","level":"info","message":"Requête entrante","method":"POST","timestamp":"2025-05-03 21:00:25","url":"/api/users/register","userAgent":"Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1"}
+{"code":"361086","level":"info","message":"Code OTP généré pour EMAIL_VERIFICATION","timestamp":"2025-05-03 21:00:25","type":"EMAIL_VERIFICATION","userId":"cma8ndjcn000019v21u2jr36k"}
+{"level":"info","message":"Initialisation du processus d'envoi d'email","timestamp":"2025-05-03 21:00:25"}
+{"level":"info","message":"Email envoyé avec succès","messageId":"<8f0bf687-c199-46db-d355-2a3acf115535@gmail.com>","timestamp":"2025-05-03 21:00:28","to":"ayemanagossa56@gmail.com"}
+{"email":"ayemanagossa56@gmail.com","level":"info","message":"Code OTP envoyé pour vérification email","timestamp":"2025-05-03 21:00:28","userId":"cma8ndjcn000019v21u2jr36k"}
+{"email":"ayemanagossa56@gmail.com","fullName":"Ben Market","ip":"::1","level":"info","message":"Nouvel utilisateur inscrit","timestamp":"2025-05-03 21:00:28","userAgent":"Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1","userId":"cma8ndjcn000019v21u2jr36k"}
+{"ip":"::1","level":"info","message":"Requête entrante","method":"POST","timestamp":"2025-05-03 21:10:55","url":"/api/users/register","userAgent":"Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1"}
+{"code":"845099","level":"info","message":"Code OTP généré pour EMAIL_VERIFICATION","timestamp":"2025-05-03 21:10:55","type":"EMAIL_VERIFICATION","userId":"cma8nr18v000419v2ik9euq27"}
+{"level":"info","message":"Initialisation du processus d'envoi d'email","timestamp":"2025-05-03 21:10:55"}
+{"level":"info","message":"Email envoyé avec succès","messageId":"<4fbcaffa-e5c0-f588-555d-70d4a339ca27@gmail.com>","timestamp":"2025-05-03 21:10:58","to":"ayemanagossa696@gmail.com"}
+{"email":"ayemanagossa696@gmail.com","level":"info","message":"Code OTP envoyé pour vérification email","timestamp":"2025-05-03 21:10:58","userId":"cma8nr18v000419v2ik9euq27"}
+{"email":"ayemanagossa696@gmail.com","fullName":"Ben Market fg","ip":"::1","level":"info","message":"Nouvel utilisateur inscrit","timestamp":"2025-05-03 21:10:58","userAgent":"Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1","userId":"cma8nr18v000419v2ik9euq27"}
+{"ip":"::1","level":"info","message":"Requête entrante","method":"POST","timestamp":"2025-05-03 21:16:00","url":"/api/users/register","userAgent":"Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1"}
+{"code":"274601","level":"info","message":"Code OTP généré pour EMAIL_VERIFICATION","timestamp":"2025-05-03 21:16:00","type":"EMAIL_VERIFICATION","userId":"cma8nxkva000819v2f86q5afb"}
+{"level":"info","message":"Initialisation du processus d'envoi d'email","timestamp":"2025-05-03 21:16:00"}
+{"level":"info","message":"Email envoyé avec succès","messageId":"<d582a82a-934d-240b-3999-4faa4e25f83d@gmail.com>","timestamp":"2025-05-03 21:16:04","to":"ayemanagoss696@gmail.com"}
+{"email":"ayemanagoss696@gmail.com","level":"info","message":"Code OTP envoyé pour vérification email","timestamp":"2025-05-03 21:16:04","userId":"cma8nxkva000819v2f86q5afb"}
+{"email":"ayemanagoss696@gmail.com","fullName":"Ben Market fg","ip":"::1","level":"info","message":"Nouvel utilisateur inscrit","timestamp":"2025-05-03 21:16:04","userAgent":"Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1","userId":"cma8nxkva000819v2f86q5afb"}
+{"ip":"::1","level":"info","message":"Requête entrante","method":"POST","timestamp":"2025-05-03 21:19:37","url":"/api/users/register","userAgent":"Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1"}
+{"code":"568618","level":"info","message":"Code OTP généré pour EMAIL_VERIFICATION","timestamp":"2025-05-03 21:19:37","type":"EMAIL_VERIFICATION","userId":"cma8o28ap000c19v2wm3uj6ef"}
+{"level":"info","message":"Initialisation du processus d'envoi d'email","timestamp":"2025-05-03 21:19:37"}
+{"level":"info","message":"Email envoyé avec succès","messageId":"<170207f8-ac59-0c43-b075-94b8e8e108ef@gmail.com>","timestamp":"2025-05-03 21:19:40","to":"ayemanagos696@gmail.com"}
+{"email":"ayemanagos696@gmail.com","level":"info","message":"Code OTP envoyé pour vérification email","timestamp":"2025-05-03 21:19:40","userId":"cma8o28ap000c19v2wm3uj6ef"}
+{"email":"ayemanagos696@gmail.com","fullName":"Ben Market","ip":"::1","level":"info","message":"Nouvel utilisateur inscrit","timestamp":"2025-05-03 21:19:40","userAgent":"Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1","userId":"cma8o28ap000c19v2wm3uj6ef"}
+{"ip":"::1","level":"info","message":"Requête entrante","method":"POST","timestamp":"2025-05-03 21:20:14","url":"/api/users/register","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"}
+{"code":"349932","level":"info","message":"Code OTP généré pour EMAIL_VERIFICATION","timestamp":"2025-05-03 21:20:14","type":"EMAIL_VERIFICATION","userId":"cma8o30x3000g19v21ibharcw"}
+{"level":"info","message":"Initialisation du processus d'envoi d'email","timestamp":"2025-05-03 21:20:14"}
+{"level":"info","message":"Email envoyé avec succès","messageId":"<b6814b19-7883-296f-a9b4-66248be40cf0@gmail.com>","timestamp":"2025-05-03 21:20:17","to":"ayemanagossa5696@gmail.com"}
+{"email":"ayemanagossa5696@gmail.com","level":"info","message":"Code OTP envoyé pour vérification email","timestamp":"2025-05-03 21:20:17","userId":"cma8o30x3000g19v21ibharcw"}
+{"email":"ayemanagossa5696@gmail.com","fullName":"Ben Market","ip":"::1","level":"info","message":"Nouvel utilisateur inscrit","timestamp":"2025-05-03 21:20:17","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36","userId":"cma8o30x3000g19v21ibharcw"}
+{"ip":"::1","level":"info","message":"Requête entrante","method":"POST","timestamp":"2025-05-03 21:29:39","url":"/api/users/register","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"}
+{"code":"128224","level":"info","message":"Code OTP généré pour EMAIL_VERIFICATION","timestamp":"2025-05-03 21:29:39","type":"EMAIL_VERIFICATION","userId":"cma8of4jo000k19v2eyevdag7"}
+{"level":"info","message":"Initialisation du processus d'envoi d'email","timestamp":"2025-05-03 21:29:39"}
+{"level":"info","message":"Email envoyé avec succès","messageId":"<c3a5fc84-a311-bd6a-9eb1-fcd7e77acde2@gmail.com>","timestamp":"2025-05-03 21:29:42","to":"ayemanagossa96@gmail.com"}
+{"email":"ayemanagossa96@gmail.com","level":"info","message":"Code OTP envoyé pour vérification email","timestamp":"2025-05-03 21:29:42","userId":"cma8of4jo000k19v2eyevdag7"}
+{"email":"ayemanagossa96@gmail.com","fullName":"Ben Market","ip":"::1","level":"info","message":"Nouvel utilisateur inscrit","timestamp":"2025-05-03 21:29:42","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36","userId":"cma8of4jo000k19v2eyevdag7"}
+{"ip":"::1","level":"info","message":"Requête entrante","method":"POST","timestamp":"2025-05-03 21:31:41","url":"/api/users/register","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"}
+{"code":"766435","level":"info","message":"Code OTP généré pour EMAIL_VERIFICATION","timestamp":"2025-05-03 21:31:41","type":"EMAIL_VERIFICATION","userId":"cma8ohr20000o19v2rbvow17l"}
+{"level":"info","message":"Initialisation du processus d'envoi d'email","timestamp":"2025-05-03 21:31:41"}
+{"level":"info","message":"Email envoyé avec succès","messageId":"<b1a3c584-a5ed-121b-cf6a-470111a95f58@gmail.com>","timestamp":"2025-05-03 21:31:44","to":"ayemanagossa996@gmail.com"}
+{"email":"ayemanagossa996@gmail.com","level":"info","message":"Code OTP envoyé pour vérification email","timestamp":"2025-05-03 21:31:44","userId":"cma8ohr20000o19v2rbvow17l"}
+{"email":"ayemanagossa996@gmail.com","fullName":"Ben Market fg","ip":"::1","level":"info","message":"Nouvel utilisateur inscrit","timestamp":"2025-05-03 21:31:44","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36","userId":"cma8ohr20000o19v2rbvow17l"}
+{"ip":"::1","level":"info","message":"Requête entrante","method":"POST","timestamp":"2025-05-03 21:33:45","url":"/api/users/register","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"}
+{"code":"913431","level":"info","message":"Code OTP généré pour EMAIL_VERIFICATION","timestamp":"2025-05-03 21:33:45","type":"EMAIL_VERIFICATION","userId":"cma8okeoq000s19v27oc7taju"}
+{"level":"info","message":"Initialisation du processus d'envoi d'email","timestamp":"2025-05-03 21:33:45"}
+{"level":"info","message":"Email envoyé avec succès","messageId":"<46d5c5a0-9bc1-4c25-a01c-aae3abaaa904@gmail.com>","timestamp":"2025-05-03 21:33:48","to":"ayemanagossa69896@gmail.com"}
+{"email":"ayemanagossa69896@gmail.com","level":"info","message":"Code OTP envoyé pour vérification email","timestamp":"2025-05-03 21:33:48","userId":"cma8okeoq000s19v27oc7taju"}
+{"email":"ayemanagossa69896@gmail.com","fullName":"Ben Market fg","ip":"::1","level":"info","message":"Nouvel utilisateur inscrit","timestamp":"2025-05-03 21:33:48","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36","userId":"cma8okeoq000s19v27oc7taju"}
+{"ip":"::1","level":"info","message":"Requête entrante","method":"POST","timestamp":"2025-05-03 22:57:13","url":"/api/users/register","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"}
+{"code":"900460","level":"info","message":"Code OTP généré pour EMAIL_VERIFICATION","timestamp":"2025-05-03 22:57:13","type":"EMAIL_VERIFICATION","userId":"cma8rjqqx000w19v23a8ajohh"}
+{"level":"info","message":"Initialisation du processus d'envoi d'email","timestamp":"2025-05-03 22:57:13"}
+{"level":"info","message":"Email envoyé avec succès","messageId":"<b006e38b-8d7d-d43d-7f69-a38023de41a9@gmail.com>","timestamp":"2025-05-03 22:57:18","to":"ayemanagossa69e6@gmail.com"}
+{"email":"ayemanagossa69e6@gmail.com","level":"info","message":"Code OTP envoyé pour vérification email","timestamp":"2025-05-03 22:57:18","userId":"cma8rjqqx000w19v23a8ajohh"}
+{"email":"ayemanagossa69e6@gmail.com","fullName":"Ben Market","ip":"::1","level":"info","message":"Nouvel utilisateur inscrit","timestamp":"2025-05-03 22:57:18","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36","userId":"cma8rjqqx000w19v23a8ajohh"}
+{"ip":"::1","level":"info","message":"Requête entrante","method":"POST","timestamp":"2025-05-03 22:59:09","url":"/api/users/register","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"}
+{"code":"414728","level":"info","message":"Code OTP généré pour EMAIL_VERIFICATION","timestamp":"2025-05-03 22:59:09","type":"EMAIL_VERIFICATION","userId":"cma8rm8gq001019v2orycf1aa"}
+{"level":"info","message":"Initialisation du processus d'envoi d'email","timestamp":"2025-05-03 22:59:09"}
+{"level":"info","message":"Email envoyé avec succès","messageId":"<b8cd22f7-42e5-ff22-eda5-3724401edb3d@gmail.com>","timestamp":"2025-05-03 22:59:13","to":"footmindset1@gmail.com"}
+{"email":"footmindset1@gmail.com","level":"info","message":"Code OTP envoyé pour vérification email","timestamp":"2025-05-03 22:59:13","userId":"cma8rm8gq001019v2orycf1aa"}
+{"email":"footmindset1@gmail.com","fullName":"Ben Market","ip":"::1","level":"info","message":"Nouvel utilisateur inscrit","timestamp":"2025-05-03 22:59:13","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36","userId":"cma8rm8gq001019v2orycf1aa"}
+{"ip":"::1","level":"info","message":"Requête entrante","method":"POST","timestamp":"2025-05-03 23:03:54","url":"/api/users/register","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"}
+{"code":"190093","level":"info","message":"Code OTP généré pour EMAIL_VERIFICATION","timestamp":"2025-05-03 23:03:54","type":"EMAIL_VERIFICATION","userId":"cma8rsc2n001419v2mc6myb0f"}
+{"level":"info","message":"Initialisation du processus d'envoi d'email","timestamp":"2025-05-03 23:03:54"}
+{"level":"info","message":"Email envoyé avec succès","messageId":"<a30f32f2-7066-d681-03ee-09c65c96dcdf@gmail.com>","timestamp":"2025-05-03 23:03:58","to":"ayemanagossa694566@gmail.com"}
+{"email":"ayemanagossa694566@gmail.com","level":"info","message":"Code OTP envoyé pour vérification email","timestamp":"2025-05-03 23:03:58","userId":"cma8rsc2n001419v2mc6myb0f"}
+{"email":"ayemanagossa694566@gmail.com","fullName":"Ben Market","ip":"::1","level":"info","message":"Nouvel utilisateur inscrit","timestamp":"2025-05-03 23:03:58","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36","userId":"cma8rsc2n001419v2mc6myb0f"}
+{"level":"info","message":"Prisma Info Starting a postgresql pool with 21 connections.","target":"quaint::pooled","timestamp":"2025-05-03 23:28:17"}
+{"level":"info","message":"Clé PASETO chargée depuis le fichier","path":"/Volumes/Untitled/MonAppEcommerce/paseto_local_key","timestamp":"2025-05-03 23:28:17"}
+{"level":"info","message":"Successfully connected to the database","timestamp":"2025-05-03 23:28:17"}
+{"level":"info","message":"🚀 Serveur démarré sur http://localhost:4000","timestamp":"2025-05-03 23:28:17"}
+{"level":"info","message":"Disconnected from the database due to application termination","timestamp":"2025-05-03 23:28:26"}

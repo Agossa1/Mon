@@ -1,0 +1,1 @@
+{"level":"error","message":"::1 - - [03/May/2025:20:00:04 +0000] \"POST /api/users/register HTTP/1.1\" 409 102 \"http://localhost:5173/\" \"Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1\"","timestamp":"2025-05-03 21:00:04"}

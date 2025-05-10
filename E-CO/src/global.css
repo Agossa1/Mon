@@ -1,0 +1,10 @@
+body {
+  background-color: #f5f5f5; /* Une nuance de gris clair */
+}
+
+/* Si vous voulez une couleur de fond différente pour le contenu principal */
+.main-content {
+  background-color: #ffffff; /* Blanc pour le contenu */
+  min-height: 100vh; /* Assure que le contenu s'étend sur toute la hauteur */
+  padding: 20px; /* Ajoute un peu d'espace autour du contenu */
+}
