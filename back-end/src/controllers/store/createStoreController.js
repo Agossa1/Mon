@@ -1,7 +1,7 @@
 import { validatorShopInput } from "../../validators/shop.js";
-import prisma from "../../config/prisma.js";
 import { logger } from "../../utils/logger.js";
-import { generateSlug } from "../../utils/helpers.js";
+import prisma from "../../config/prisma.js";
+
 
 /**
  * Crée une nouvelle boutique pour l'utilisateur authentifié
@@ -193,22 +193,66 @@ export const createStore = async (req, res) => {
  * @returns {Promise<string>} Slug unique
  */
 async function generateUniqueSlug(name) {
+    // Vérifier que name est une chaîne valide
+    if (!name || typeof name !== 'string') {
+        throw new Error('Le nom de la boutique doit être une chaîne de caractères valide');
+    }
+    
+    // Générer le slug de base
     let slug = generateSlug(name);
+    
+    // Vérifier que le slug généré est une chaîne valide
+    if (!slug || typeof slug !== 'string') {
+        // Fallback si generateSlug échoue
+        slug = name.toLowerCase()
+            .replace(/[^\w\s-]/g, '') // Supprimer les caractères spéciaux
+            .replace(/\s+/g, '-')     // Remplacer les espaces par des tirets
+            .replace(/-+/g, '-')      // Éviter les tirets multiples
+            .trim();
+    }
+    
     let isUnique = false;
     let counter = 0;
+    let currentSlug = slug;
     
-    while (!isUnique) {
-        const existingSlug = await prisma.shop.findUnique({
-            where: { slug: counter === 0 ? slug : `${slug}-${counter}` }
-        });
+    // Limiter le nombre de tentatives pour éviter les boucles infinies
+    const maxAttempts = 100;
+    
+    while (!isUnique && counter < maxAttempts) {
+        // S'assurer que le slug est une chaîne valide avant la requête
+        if (counter > 0) {
+            currentSlug = `${slug}-${counter}`;
+        }
         
-        if (!existingSlug) {
-            isUnique = true;
-        } else {
-            counter++;
+        try {
+            // Utiliser findFirst au lieu de findUnique pour éviter les erreurs si slug n'est pas défini comme unique
+            const existingSlug = await prisma.shop.findFirst({
+                where: { slug: currentSlug }
+            });
+            
+            if (!existingSlug) {
+                isUnique = true;
+            } else {
+                counter++;
+            }
+        } catch (error) {
+            // En cas d'erreur, logger et utiliser un slug avec timestamp pour garantir l'unicité
+            logger.error('Erreur lors de la vérification du slug:', {
+                error: error.message,
+                slug: currentSlug
+            });
+            
+            // Générer un slug avec timestamp pour garantir l'unicité
+            const timestamp = Date.now().toString().slice(-6);
+            return `${slug}-${timestamp}`;
         }
     }
     
-    return counter === 0 ? slug : `${slug}-${counter}`;
+    // Si on a atteint le nombre maximum de tentatives, ajouter un timestamp
+    if (counter >= maxAttempts) {
+        const timestamp = Date.now().toString().slice(-6);
+        return `${slug}-${timestamp}`;
+    }
+    
+    return currentSlug;
 }
-

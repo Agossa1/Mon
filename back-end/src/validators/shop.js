@@ -1,209 +1,199 @@
 import Joi from 'joi';
 
 /**
- * Schéma de validation pour la création d'une boutique
+ * Valide les données pour la création d'une boutique
+ * @param {Object} data - Données à valider
+ * @returns {Object} Résultat de la validation
  */
 export const validatorShopInput = Joi.object({
-  name: Joi.string()
-    .required()
-    .min(3)
-    .max(100)
-    .trim()
-    .messages({
-      'string.base': 'Le nom doit être une chaîne de caractères',
-      'string.empty': 'Le nom est requis',
-      'string.min': 'Le nom doit contenir au moins {#limit} caractères',
-      'string.max': 'Le nom ne peut pas dépasser {#limit} caractères',
-      'any.required': 'Le nom est requis'
-    }),
-  
-  description: Joi.string()
-    .max(1000)
-    .allow('')
-    .optional()
-    .messages({
-      'string.base': 'La description doit être une chaîne de caractères',
-      'string.max': 'La description ne peut pas dépasser {#limit} caractères'
-    }),
-  
-  slug: Joi.string()
-    .min(3)
-    .max(100)
-    .pattern(/^[a-z0-9-]+$/)
-    .optional()
-    .messages({
-      'string.base': 'Le slug doit être une chaîne de caractères',
-      'string.min': 'Le slug doit contenir au moins {#limit} caractères',
-      'string.max': 'Le slug ne peut pas dépasser {#limit} caractères',
-      'string.pattern.base': 'Le slug ne peut contenir que des lettres minuscules, des chiffres et des tirets'
-    }),
-  
-  shopType: Joi.string()
-    .valid('PHYSICAL', 'ONLINE', 'HYBRID')
-    .required()
-    .messages({
-      'string.base': 'Le type de boutique doit être une chaîne de caractères',
-      'any.only': 'Le type de boutique doit être PHYSICAL, ONLINE ou HYBRID',
-      'any.required': 'Le type de boutique est requis'
-    }),
-  
-  category: Joi.string()
-    .required()
-    .messages({
-      'string.base': 'La catégorie doit être une chaîne de caractères',
-      'any.required': 'La catégorie est requise'
-    }),
-  
-  subCategory: Joi.string()
-    .optional()
-    .allow('')
-    .messages({
-      'string.base': 'La sous-catégorie doit être une chaîne de caractères'
-    }),
-  
-  logo: Joi.string()
-    .uri()
-    .optional()
-    .allow('')
-    .messages({
-      'string.base': 'Le logo doit être une chaîne de caractères',
-      'string.uri': 'Le logo doit être une URL valide'
-    }),
-  
-  coverImage: Joi.string()
-    .uri()
-    .optional()
-    .allow('')
-    .messages({
-      'string.base': 'L\'image de couverture doit être une chaîne de caractères',
-      'string.uri': 'L\'image de couverture doit être une URL valide'
-    }),
-  
-  contactEmail: Joi.string()
-    .email()
-    .optional()
-    .allow('')
-    .messages({
-      'string.base': 'L\'email de contact doit être une chaîne de caractères',
-      'string.email': 'L\'email de contact doit être une adresse email valide'
-    }),
-  
-  contactPhone: Joi.string()
-    .pattern(/^(\+\d{1,3}[- ]?)?\d{9,15}$/)
-    .optional()
-    .allow('')
-    .messages({
-      'string.base': 'Le téléphone de contact doit être une chaîne de caractères',
-      'string.pattern.base': 'Le téléphone de contact doit être un numéro de téléphone valide'
-    }),
-  
-  website: Joi.string()
-    .uri()
-    .optional()
-    .allow('')
-    .messages({
-      'string.base': 'Le site web doit être une chaîne de caractères',
-      'string.uri': 'Le site web doit être une URL valide'
-    }),
-  
-  socialLinks: Joi.object({
-    facebook: Joi.string().uri().optional().allow(''),
-    instagram: Joi.string().uri().optional().allow(''),
-    twitter: Joi.string().uri().optional().allow(''),
-    linkedin: Joi.string().uri().optional().allow(''),
-    youtube: Joi.string().uri().optional().allow(''),
-    tiktok: Joi.string().uri().optional().allow('')
-  })
-    .optional()
-    .messages({
-      'object.base': 'Les liens sociaux doivent être un objet'
-    }),
-  
-  address: Joi.object({
-    street: Joi.string().optional().allow(''),
-    city: Joi.string().required(),
-    state: Joi.string().optional().allow(''),
-    postalCode: Joi.string().optional().allow(''),
-    country: Joi.string().required()
-  })
-    .optional()
-    .messages({
-      'object.base': 'L\'adresse doit être un objet'
-    }),
-  
-  businessHours: Joi.object({
-    monday: Joi.object({
-      open: Joi.boolean().default(true),
-      openingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
-      closingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional()
-    }).optional(),
-    tuesday: Joi.object({
-      open: Joi.boolean().default(true),
-      openingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
-      closingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional()
-    }).optional(),
-    wednesday: Joi.object({
-      open: Joi.boolean().default(true),
-      openingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
-      closingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional()
-    }).optional(),
-    thursday: Joi.object({
-      open: Joi.boolean().default(true),
-      openingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
-      closingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional()
-    }).optional(),
-    friday: Joi.object({
-      open: Joi.boolean().default(true),
-      openingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
-      closingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional()
-    }).optional(),
-    saturday: Joi.object({
-      open: Joi.boolean().default(true),
-      openingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
-      closingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional()
-    }).optional(),
-    sunday: Joi.object({
-      open: Joi.boolean().default(false),
-      openingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
-      closingTime: Joi.string().pattern(/^([01]\d|2[0-3]):([0-5]\d)$/).optional()
-    }).optional()
-  })
-    .optional()
-    .messages({
-      'object.base': 'Les horaires d\'ouverture doivent être un objet'
-    }),
-  
-  tags: Joi.array()
-    .items(Joi.string().max(30))
-    .max(10)
-    .optional()
-    .messages({
-      'array.base': 'Les tags doivent être un tableau',
-      'array.max': 'Vous ne pouvez pas ajouter plus de {#limit} tags',
-      'string.max': 'Un tag ne peut pas dépasser {#limit} caractères'
-    }),
-  
-  settings: Joi.object({
-    allowReviews: Joi.boolean().default(true),
-    showContactInfo: Joi.boolean().default(true),
-    showBusinessHours: Joi.boolean().default(true),
-    showSocialLinks: Joi.boolean().default(true),
-    allowMessages: Joi.boolean().default(true)
-  })
-    .optional()
-    .messages({
-      'object.base': 'Les paramètres doivent être un objet'
-    })
+    // Champs obligatoires
+    name: Joi.string()
+        .min(3)
+        .max(100)
+        .required()
+        .messages({
+            'string.empty': 'Le nom de la boutique est requis',
+            'string.min': 'Le nom de la boutique doit contenir au moins {#limit} caractères',
+            'string.max': 'Le nom de la boutique ne peut pas dépasser {#limit} caractères',
+            'any.required': 'Le nom de la boutique est requis'
+        }),
+
+    // Champs avec valeurs par défaut mais qui peuvent être fournis
+    shopType: Joi.string()
+        .valid('INDIVIDUAL', 'COMPANY', 'ASSOCIATION', 'OTHER')
+        .default('INDIVIDUAL')
+        .messages({
+            'any.only': 'Le type de boutique doit être l\'un des suivants: INDIVIDUAL, COMPANY, ASSOCIATION, OTHER'
+        }),
+
+    category: Joi.string()
+        .valid('FASHION', 'ELECTRONICS', 'HOME', 'BEAUTY', 'FOOD', 'SPORTS', 'TOYS', 'BOOKS', 'OTHER')
+        .default('OTHER')
+        .messages({
+            'any.only': 'La catégorie doit être l\'une des suivantes: FASHION, ELECTRONICS, HOME, BEAUTY, FOOD, SPORTS, TOYS, BOOKS, OTHER'
+        }),
+
+    // Champs optionnels
+    description: Joi.string()
+        .max(2000)
+        .allow(null, '')
+        .messages({
+            'string.max': 'La description ne peut pas dépasser {#limit} caractères'
+        }),
+
+    shortDescription: Joi.string()
+        .max(200)
+        .allow(null, '')
+        .messages({
+            'string.max': 'La description courte ne peut pas dépasser {#limit} caractères'
+        }),
+
+    // Tableaux optionnels
+    subCategories: Joi.array()
+        .items(Joi.string())
+        .default([])
+        .messages({
+            'array.base': 'Les sous-catégories doivent être un tableau'
+        }),
+
+    tags: Joi.array()
+        .items(Joi.string().max(50))
+        .default([])
+        .messages({
+            'array.base': 'Les tags doivent être un tableau',
+            'string.max': 'Un tag ne peut pas dépasser {#limit} caractères'
+        }),
+
+    languages: Joi.array()
+        .items(Joi.string().min(2).max(5))
+        .default(['fr'])
+        .messages({
+            'array.base': 'Les langues doivent être un tableau',
+            'string.min': 'Le code de langue doit contenir au moins {#limit} caractères',
+            'string.max': 'Le code de langue ne peut pas dépasser {#limit} caractères'
+        }),
+
+    // Autres champs optionnels
+    currency: Joi.string()
+        .min(3)
+        .max(3)
+        .default('EUR')
+        .messages({
+            'string.min': 'Le code de devise doit contenir {#limit} caractères',
+            'string.max': 'Le code de devise doit contenir {#limit} caractères'
+        }),
+
+    timeZone: Joi.string()
+        .default('Europe/Paris')
+        .messages({
+            'string.base': 'Le fuseau horaire doit être une chaîne de caractères valide'
+        }),
+
+    // Informations d'adresse optionnelles (peuvent être fournies ou récupérées du profil)
+    address: Joi.string().max(200).allow(null, ''),
+    city: Joi.string().max(100).allow(null, ''),
+    state: Joi.string().max(100).allow(null, ''),
+    postalCode: Joi.string().max(20).allow(null, ''),
+    country: Joi.string().max(100).allow(null, '')
 });
+
+/**
+ * Valide les données pour la mise à jour d'une boutique
+ * @param {Object} data - Données à valider
+ * @returns {Object} Résultat de la validation
+ */
+export const validateUpdateShopInput = Joi.object({
+    // Tous les champs sont optionnels pour une mise à jour
+    name: Joi.string()
+        .min(3)
+        .max(100)
+        .messages({
+            'string.min': 'Le nom de la boutique doit contenir au moins {#limit} caractères',
+            'string.max': 'Le nom de la boutique ne peut pas dépasser {#limit} caractères'
+        }),
+
+    shopType: Joi.string()
+        .valid('INDIVIDUAL', 'COMPANY', 'ASSOCIATION', 'OTHER')
+        .messages({
+            'any.only': 'Le type de boutique doit être l\'un des suivants: INDIVIDUAL, COMPANY, ASSOCIATION, OTHER'
+        }),
+
+    category: Joi.string()
+        .valid('FASHION', 'ELECTRONICS', 'HOME', 'BEAUTY', 'FOOD', 'SPORTS', 'TOYS', 'BOOKS', 'OTHER')
+        .messages({
+            'any.only': 'La catégorie doit être l\'une des suivantes: FASHION, ELECTRONICS, HOME, BEAUTY, FOOD, SPORTS, TOYS, BOOKS, OTHER'
+        }),
+
+    description: Joi.string()
+        .max(2000)
+        .allow(null, '')
+        .messages({
+            'string.max': 'La description ne peut pas dépasser {#limit} caractères'
+        }),
+
+    shortDescription: Joi.string()
+        .max(200)
+        .allow(null, '')
+        .messages({
+            'string.max': 'La description courte ne peut pas dépasser {#limit} caractères'
+        }),
+
+    subCategories: Joi.array()
+        .items(Joi.string())
+        .messages({
+            'array.base': 'Les sous-catégories doivent être un tableau'
+        }),
+
+    tags: Joi.array()
+        .items(Joi.string().max(50))
+        .messages({
+            'array.base': 'Les tags doivent être un tableau',
+            'string.max': 'Un tag ne peut pas dépasser {#limit} caractères'
+        }),
+
+    languages: Joi.array()
+        .items(Joi.string().min(2).max(5))
+        .messages({
+            'array.base': 'Les langues doivent être un tableau',
+            'string.min': 'Le code de langue doit contenir au moins {#limit} caractères',
+            'string.max': 'Le code de langue ne peut pas dépasser {#limit} caractères'
+        }),
+
+    currency: Joi.string()
+        .min(3)
+        .max(3)
+        .messages({
+            'string.min': 'Le code de devise doit contenir {#limit} caractères',
+            'string.max': 'Le code de devise doit contenir {#limit} caractères'
+        }),
+
+    timeZone: Joi.string(),
+
+    address: Joi.string().max(200).allow(null, ''),
+    city: Joi.string().max(100).allow(null, ''),
+    state: Joi.string().max(100).allow(null, ''),
+    postalCode: Joi.string().max(20).allow(null, ''),
+    country: Joi.string().max(100).allow(null, ''),
+
+    // Champs supplémentaires pour la mise à jour
+    status: Joi.string()
+        .valid('PENDING', 'ACTIVE', 'SUSPENDED', 'CLOSED')
+        .messages({
+            'any.only': 'Le statut doit être l\'un des suivants: PENDING, ACTIVE, SUSPENDED, CLOSED'
+        }),
+
+    firstName: Joi.string().max(100),
+    lastName: Joi.string().max(100),
+    email: Joi.string().email(),
+    phone: Joi.string().pattern(/^(\+\d{1,3}[- ]?)?\d{9,10}$/).allow(null, '')
+});
+
 
 /**
  * Schéma de validation pour la mise à jour d'une boutique
  * Basé sur le schéma de création mais avec tous les champs optionnels
  */
-/**
- * Schéma de validation pour la mise à jour d'une boutique
- * Basé sur le schéma de création mais avec tous les champs optionnels
- */
+
 export const updateShopSchema = Joi.object({
   name: Joi.string()
     .min(3)

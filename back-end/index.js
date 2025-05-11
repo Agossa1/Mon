@@ -1,6 +1,6 @@
 import express from 'express';
 import { Prisma } from '@prisma/client';
-import { logger } from './src/utils/logger.js';
+import logger from './src/utils/logger.js';
 import { ValidationError } from './src/utils/errors.js';
 import { verifyToken } from './src/utils/paseto.js';
 import helmet from 'helmet';
@@ -16,8 +16,6 @@ dotenv.config();
 // Import des routes
 
 import AdminRoutes from "./src/routes/AdminRoutes.js";
-
-
 import {authRoutes} from "./src/routes/authRoutes.js";
 import {sellerRoutes} from "./src/routes/sellerRoutes.js";
 
@@ -74,24 +72,32 @@ app.use(rateLimit({
   }
 }));
 
-// Middleware de journalisation des requêtes
+// Middleware de journalisation des requêtes HTTP avec Morgan
 app.use(morgan('combined', {
   skip: (req, res) => res.statusCode < 400,
   stream: {
     write: (message) => {
-      logger.error(message.trim());
+      try {
+        logger.error(message.trim());
+      } catch (err) {
+        console.error('Erreur lors du logging Morgan:', err);
+      }
     }
   }
 }));
 
 // Middleware pour la journalisation des requêtes
 app.use((req, res, next) => {
-  logger.info('Requête entrante', {
-    method: req.method,
-    url: req.url,
-    ip: req.ip,
-    userAgent: req.headers['user-agent']
-  });
+  try {
+    logger.info('Requête entrante', {
+      method: req.method,
+      url: req.url,
+      ip: req.ip,
+      userAgent: req.headers['user-agent']
+    });
+  } catch (err) {
+    console.error('Erreur lors du logging de requête:', err);
+  }
   next();
 });
 
@@ -120,10 +126,14 @@ app.use(async (req, res, next) => {
     next();
   } catch (error) {
     // Ne pas renvoyer d'erreur, simplement continuer sans authentification
-    logger.warn('Erreur d\'authentification', {
-      error: error.message,
-      ip: req.ip
-    });
+    try {
+      logger.warn('Erreur d\'authentification', {
+        error: error.message,
+        ip: req.ip
+      });
+    } catch (logErr) {
+      console.error('Erreur lors du logging d\'authentification:', logErr);
+    }
     next();
   }
 });
@@ -157,11 +167,15 @@ app.use((req, res) => {
 // Middleware pour gérer les erreurs de validation
 app.use((err, req, res, next) => {
   if (err instanceof ValidationError) {
-    logger.warn('Erreur de validation', {
-      error: err.message,
-      stack: err.stack,
-      ip: req.ip
-    });
+    try {
+      logger.warn('Erreur de validation', {
+        error: err.message,
+        stack: err.stack,
+        ip: req.ip
+      });
+    } catch (logErr) {
+      console.error('Erreur lors du logging de validation:', logErr);
+    }
     return res.status(400).json({
       success: false,
       message: 'Données invalides',
@@ -175,12 +189,16 @@ app.use((err, req, res, next) => {
 // Middleware pour gérer les erreurs de Prisma
 app.use((err, req, res, next) => {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    logger.error('Erreur de requête Prisma', {
-      code: err.code,
-      error: err.message,
-      meta: err.meta,
-      ip: req.ip
-    });
+    try {
+      logger.error('Erreur de requête Prisma', {
+        code: err.code,
+        error: err.message,
+        meta: err.meta,
+        ip: req.ip
+      });
+    } catch (logErr) {
+      console.error('Erreur lors du logging Prisma:', logErr);
+    }
     
     // Gérer les erreurs spécifiques de Prisma
     if (err.code === 'P2002') {
@@ -210,11 +228,15 @@ app.use((err, req, res, next) => {
 
 // Middleware pour gérer les erreurs générales
 app.use((err, req, res, next) => {
-  logger.error('Erreur non gérée', {
-    error: err.message,
-    stack: err.stack,
-    ip: req.ip
-  });
+  try {
+    logger.error('Erreur non gérée', {
+      error: err.message,
+      stack: err.stack,
+      ip: req.ip
+    });
+  } catch (logErr) {
+    console.error('Erreur lors du logging d\'erreur:', logErr);
+  }
   
   res.status(500).json({
     success: false,
@@ -225,27 +247,73 @@ app.use((err, req, res, next) => {
 
 // Démarrage du serveur
 app.listen(PORT, () => {
-  logger.info(`🚀 Serveur démarré sur http://localhost:${PORT}`);
+  try {
+    logger.info(`🚀 Serveur démarré sur http://localhost:${PORT}`);
+  } catch (err) {
+    console.error('Erreur lors du logging de démarrage:', err);
+  }
   console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);
 });
 
+// IMPORTANT: Supprimer les gestionnaires d'événements dupliqués
+// Garder uniquement ces gestionnaires d'événements pour éviter les doublons
+
 // Gestion des erreurs non capturées
 process.on('uncaughtException', (error) => {
-  logger.fatal('Erreur non capturée', {
-    error: error.message,
-    stack: error.stack
-  });
+  try {
+    logger.fatal('Erreur non capturée', {
+      error: error.message,
+      stack: error.stack
+    });
+  } catch (logErr) {
+    console.error('Erreur lors du logging d\'exception:', logErr);
+  }
   console.error('ERREUR NON CAPTURÉE:', error);
-  // Arrêt propre du serveur
-  process.exit(1);
+  
+  // Attendre un peu avant de quitter pour permettre au logger d'écrire
+  setTimeout(() => {
+    process.exit(1);
+  }, 1000);
 });
 
+// Gestion des promesses rejetées non gérées
 process.on('unhandledRejection', (reason, promise) => {
-  logger.fatal('Promesse rejetée non gérée', {
-    reason: reason.message || reason,
-    stack: reason.stack || 'No stack trace'
-  });
+  try {
+    logger.fatal('Promesse rejetée non gérée', {
+      reason: reason.message || reason,
+      stack: reason.stack || 'No stack trace'
+    });
+  } catch (logErr) {
+    console.error('Erreur lors du logging de rejet:', logErr);
+  }
   console.error('PROMESSE REJETÉE NON GÉRÉE:', reason);
+});
+
+// Ajouter une gestion propre de l'arrêt de l'application
+process.on('SIGINT', async () => {
+  console.log('Arrêt en cours...');
+  try {
+    if (typeof logger.shutdown === 'function') {
+      await logger.shutdown();
+      console.log('Logger fermé avec succès');
+    }
+  } catch (err) {
+    console.error('Erreur lors de la fermeture du logger:', err);
+  }
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  console.log('Signal de terminaison reçu, arrêt en cours...');
+  try {
+    if (typeof logger.shutdown === 'function') {
+      await logger.shutdown();
+      console.log('Logger fermé avec succès');
+    }
+  } catch (err) {
+    console.error('Erreur lors de la fermeture du logger:', err);
+  }
+  process.exit(0);
 });
 
 export default app;

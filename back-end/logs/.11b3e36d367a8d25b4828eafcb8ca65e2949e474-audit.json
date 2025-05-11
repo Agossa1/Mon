@@ -9,6 +9,11 @@
             "date": 1746877863695,
             "name": "/Volumes/Untitled/Api1/back-end/logs/error-2025-05-10.log",
             "hash": "e45e9a5db3c6d5afa704ebb17b058179a62f9557c619f6dfd987ea0e91b5d2fc"
+        },
+        {
+            "date": 1746960841540,
+            "name": "/Volumes/Untitled/Api1/back-end/logs/error-2025-05-11.log",
+            "hash": "c94c6d94539ce0980e0cb45f6dd0ff9d1a1ad5282bd3cb75a99ddf261d083ecf"
         }
     ],
     "hashType": "sha256"

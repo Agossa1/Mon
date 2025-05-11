@@ -2,121 +2,180 @@ import prisma from "../../config/prisma.js";
 import { logger } from "../../utils/logger.js";
 
 /**
- * Récupère une boutique par son ID avec des options de filtrage des relations
- * @param {string} id - ID de la boutique à récupérer
+ * Fonction utilitaire pour construire les options d'inclusion
  * @param {Object} options - Options pour contrôler les inclusions
- * @returns {Object} Boutique trouvée
- * @throws {Error} Si la boutique n'est pas trouvée ou en cas d'erreur
+ * @returns {Object} Options d'inclusion pour Prisma
  */
-export const getShopById = async (id, options = {}) => {
+function buildIncludeOptions(options) {
+    const {
+        includeProducts = false,
+        includeOrders = false,
+        includeOwner = true,
+        includeStats = true,
+        productLimit = 10,
+        orderLimit = 10
+    } = options;
+
+    const include = {};
+
+    // Produits récents (version optimisée)
+    if (includeProducts) {
+        include.products = {
+            take: productLimit,
+            orderBy: { createdAt: 'desc' },
+            select: {
+                id: true,
+                name: true,
+                price: true,
+                mainImage: true,
+                status: true,
+                createdAt: true
+            }
+        };
+    }
+
+    // Commandes récentes (version optimisée)
+    if (includeOrders) {
+        include.orders = {
+            take: orderLimit,
+            orderBy: { createdAt: 'desc' },
+            select: {
+                id: true,
+                orderNumber: true,
+                status: true,
+                totalAmount: true,
+                createdAt: true
+            }
+        };
+    }
+
+    // Propriétaire de la boutique (version optimisée)
+    if (includeOwner) {
+        include.owner = {
+            select: {
+                id: true,
+                fullName: true,
+                profileImage: true
+            }
+        };
+    }
+
+    // Statistiques (version optimisée)
+    if (includeStats) {
+        include._count = {
+            select: {
+                products: true,
+                orders: true
+            }
+        };
+    }
+
+    return include;
+}
+
+/**
+ * Récupère une boutique par son ID
+ * @param {Object} req - Requête Express
+ * @param {Object} res - Réponse Express
+ * @returns {Object} Réponse JSON avec les détails de la boutique
+ */
+export const getShopById = async (req, res) => {
     try {
-        // Options par défaut pour les inclusions
-        const {
-            includeProducts = false,
-            includeOrders = false,
-            includeCustomers = false,
-            includeOwner = true,
-            includeMembers = true,
-            includeStats = true,
-            includeReviews = false,
-            productLimit = 10,
-            orderLimit = 10,
-            reviewLimit = 5
-        } = options;
+        const { id } = req.params;
 
-        // Construction dynamique des inclusions selon les options
-        const include = {};
-        
-        if (includeProducts) {
-            include.products = {
-                take: productLimit,
-                orderBy: { createdAt: 'desc' },
-                select: {
-                    id: true,
-                    name: true,
-                    price: true,
-                    mainImage: true,
-                    status: true,
-                    createdAt: true
-                }
-            };
-        }
-        
-        if (includeOrders) {
-            include.orders = {
-                take: orderLimit,
-                orderBy: { createdAt: 'desc' }
-            };
-        }
-        
-        if (includeCustomers) {
-            include.customers = true;
-        }
-        
-        if (includeOwner) {
-            include.owner = {
-                select: {
-                    id: true,
-                    fullName: true,
-                    email: true,
-                    profileImage: true
-                }
-            };
-        }
-        
-        if (includeMembers) {
-            include.members = {
-                include: {
-                    user: {
-                        select: {
-                            id: true,
-                            fullName: true,
-                            email: true,
-                            profileImage: true
-                        }
-                    }
-                }
-            };
-        }
-        
-        if (includeStats) {
-            include.stats = true;
-        }
-        
-        if (includeReviews) {
-            include.reviews = {
-                take: reviewLimit,
-                orderBy: { createdAt: 'desc' },
-                include: {
-                    user: {
-                        select: {
-                            id: true,
-                            fullName: true,
-                            profileImage: true
-                        }
-                    }
-                }
-            };
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: "L'ID de la boutique est requis",
+                error: "MISSING_ID"
+            });
         }
 
-        // Récupération de la boutique avec les inclusions spécifiées
+        // Récupérer la boutique avec des informations limitées
         const shop = await prisma.shop.findUnique({
             where: { id },
-            include
+            select: {
+                id: true,
+                name: true,
+                slug: true,
+                shopType: true,
+                description: true,
+                shortDescription: true,
+                logo: true,
+                banner: true,
+                colors: true,
+                category: true,
+                subCategories: true,
+                tags: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                phone: true,
+                website: true,
+                socialMedia: true,
+                address: true,
+                city: true,
+                state: true,
+                postalCode: true,
+                country: true,
+                coordinates: true,
+                currency: true,
+                languages: true,
+                timeZone: true,
+                status: true,
+                featured: true,
+                verified: true,
+                createdAt: true,
+                updatedAt: true,
+                ownerId: true,
+                rating: true,
+                reviewCount: true,
+                salesCount: true,
+                productCount: true,
+                followerCount: true
+            }
         });
 
         if (!shop) {
-            logger.warn(`Boutique non trouvée: ${id}`);
-            throw new Error('Boutique introuvable');
+            return res.status(404).json({
+                success: false,
+                message: "Boutique non trouvée",
+                error: "SHOP_NOT_FOUND"
+            });
         }
 
-        logger.info(`Boutique récupérée: ${id}`);
-        return shop;
+        // Vérifier si la boutique est active ou si l'utilisateur est autorisé à la voir
+        const isActive = shop.status === 'ACTIVE';
+        const isOwner = req.user && req.user.id === shop.ownerId;
+        const isAdmin = req.user && req.user.role === 'ADMIN';
+
+        if (!isActive && !isOwner && !isAdmin) {
+            return res.status(403).json({
+                success: false,
+                message: "Cette boutique n'est pas encore active",
+                error: "SHOP_NOT_ACTIVE"
+            });
+        }
+
+        logger.info(`Boutique récupérée avec succès: ${shop.name}`);
+
+        return res.status(200).json({
+            success: true,
+            message: "Boutique récupérée avec succès",
+            data: shop
+        });
     } catch (error) {
-        logger.error(`Erreur lors de la récupération de la boutique ${id}:`, error);
-        throw error;
+        logger.error(`Erreur lors de la récupération de la boutique: ${error.message}`, {
+            error: error.stack
+        });
+
+        return res.status(500).json({
+            success: false,
+            message: "Une erreur est survenue lors de la récupération de la boutique",
+            error: process.env.NODE_ENV === 'development' ? error.message : "SERVER_ERROR"
+        });
     }
-}
+};
 
 /**
  * Récupère toutes les boutiques avec filtrage et pagination
@@ -129,43 +188,52 @@ export const getAllShops = async (filters = {}, pagination = {}) => {
     try {
         const { status, category, featured, verified, search } = filters;
         const { page = 1, limit = 10, sortBy = 'createdAt', sortOrder = 'desc' } = pagination;
-        
+
         // Construction des conditions de filtrage
         const where = {};
-        
+
         if (status) {
             where.status = status;
         }
-        
+
         if (category) {
             where.category = category;
         }
-        
+
         if (featured !== undefined) {
             where.featured = featured;
         }
-        
+
         if (verified !== undefined) {
             where.verified = verified;
         }
-        
+
         if (search) {
             where.OR = [
                 { name: { contains: search, mode: 'insensitive' } },
-                { description: { contains: search, mode: 'insensitive' } }
+                { shortDescription: { contains: search, mode: 'insensitive' } }
             ];
         }
-        
+
         // Calcul de l'offset pour la pagination
         const skip = (page - 1) * limit;
-        
-        // Récupération des boutiques avec pagination et tri
+
+        // Récupération des boutiques avec pagination et tri (optimisée)
         const shops = await prisma.shop.findMany({
             where,
             skip,
             take: limit,
             orderBy: { [sortBy]: sortOrder },
-            include: {
+            select: {
+                id: true,
+                name: true,
+                slug: true,
+                logo: true,
+                shortDescription: true,
+                category: true,
+                featured: true,
+                verified: true,
+                createdAt: true,
                 owner: {
                     select: {
                         id: true,
@@ -175,18 +243,17 @@ export const getAllShops = async (filters = {}, pagination = {}) => {
                 },
                 _count: {
                     select: {
-                        products: true,
-                        reviews: true
+                        products: true
                     }
                 }
             }
         });
-        
+
         // Compter le nombre total de boutiques pour la pagination
         const totalCount = await prisma.shop.count({ where });
-        
+
         logger.info(`${shops.length} boutiques récupérées sur ${totalCount}`);
-        
+
         return {
             shops,
             pagination: {
@@ -202,134 +269,128 @@ export const getAllShops = async (filters = {}, pagination = {}) => {
     }
 }
 
+
 /**
  * Récupère une boutique par son slug
- * @param {string} slug - Slug de la boutique à récupérer
- * @param {Object} options - Options pour contrôler les inclusions
- * @returns {Object} Boutique trouvée
- * @throws {Error} Si la boutique n'est pas trouvée ou en cas d'erreur
+ * @param {Object} req - Requête Express
+ * @param {Object} res - Réponse Express
  */
-export const getShopBySlug = async (slug, options = {}) => {
+/**
+ * Récupère une boutique par son slug
+ * @param {Object} req - Requête Express
+ * @param {Object} res - Réponse Express
+ */
+export const getShopBySlug = async (req, res) => {
     try {
-        // Utiliser les mêmes options que getShopById
-        const shop = await prisma.shop.findUnique({
-            where: { slug },
-            include: buildIncludeOptions(options)
-        });
+        const { slug } = req.params;
 
-        if (!shop) {
-            logger.warn(`Boutique non trouvée avec le slug: ${slug}`);
-            throw new Error('Boutique introuvable');
+        if (!slug) {
+            return res.status(400).json({
+                success: false,
+                message: "Le slug de la boutique est requis",
+                error: "MISSING_SLUG"
+            });
         }
 
-        logger.info(`Boutique récupérée par slug: ${slug}`);
-        return shop;
-    } catch (error) {
-        logger.error(`Erreur lors de la récupération de la boutique par slug ${slug}:`, error);
-        throw error;
-    }
-}
+        logger.info(`Récupération de la boutique avec le slug: ${slug}`);
 
-/**
- * Fonction utilitaire pour construire les options d'inclusion
- * @param {Object} options - Options pour contrôler les inclusions
- * @returns {Object} Options d'inclusion pour Prisma
- */
-function buildIncludeOptions(options) {
-    const {
-        includeProducts = false,
-        includeOrders = false,
-        includeCustomers = false,
-        includeOwner = true,
-        includeMembers = true,
-        includeStats = true,
-        includeReviews = false,
-        productLimit = 10,
-        orderLimit = 10,
-        reviewLimit = 5
-    } = options;
-
-    const include = {};
-    
-    if (includeProducts) {
-        include.products = {
-            take: productLimit,
-            orderBy: { createdAt: 'desc' },
+        // Vérifier d'abord si la boutique existe, quel que soit son statut
+        const shopExists = await prisma.shop.findUnique({
+            where: {
+                slug: slug
+            },
             select: {
                 id: true,
                 name: true,
-                price: true,
-                mainImage: true,
                 status: true,
-                createdAt: true
+                ownerId: true
             }
-        };
-    }
-    
-    if (includeOrders) {
-        include.orders = {
-            take: orderLimit,
-            orderBy: { createdAt: 'desc' }
-        };
-    }
-    
-    if (includeCustomers) {
-        include.customers = true;
-    }
-    
-    if (includeOwner) {
-        include.owner = {
+        });
+
+        if (!shopExists) {
+            logger.warn(`Boutique non trouvée avec le slug: ${slug}`);
+            return res.status(404).json({
+                success: false,
+                message: "Boutique non trouvée",
+                error: "SHOP_NOT_FOUND"
+            });
+        }
+
+        // Vérifier si l'utilisateur est autorisé à voir une boutique non active
+        const isAuthorized =
+            shopExists.status === 'ACTIVE' ||
+            (req.user && (
+                req.user.role === 'ADMIN' ||
+                req.user.id === shopExists.ownerId
+            ));
+
+        if (!isAuthorized) {
+            logger.warn(`Boutique trouvée avec le slug: ${slug} mais son statut est: ${shopExists.status}`);
+            return res.status(403).json({
+                success: false,
+                message: `Cette boutique n'est pas encore active`,
+                error: "SHOP_NOT_ACTIVE",
+                shopStatus: shopExists.status,
+                shopName: shopExists.name,
+                isOwner: req.user && req.user.id === shopExists.ownerId
+            });
+        }
+
+        // Récupérer les détails complets de la boutique
+        const shop = await prisma.shop.findUnique({
+            where: {
+                slug: slug
+            },
             select: {
                 id: true,
-                fullName: true,
-                email: true,
-                profileImage: true
+                name: true,
+                slug: true,
+                logo: true,
+                banner: true,
+                shortDescription: true,
+                description: true,
+                category: true,
+                subCategories: true,
+                tags: true,
+                verified: true,
+                featured: true,
+                status: true,
+                createdAt: true,
+                updatedAt: true,
+                ownerId: true,
+                rating: true,
+                reviewCount: true,
+                salesCount: true,
+                productCount: true,
+                followerCount: true
             }
-        };
-    }
-    
-    if (includeMembers) {
-        include.members = {
-            include: {
-                user: {
-                    select: {
-                        id: true,
-                        fullName: true,
-                        email: true,
-                        profileImage: true
-                    }
-                }
-            }
-        };
-    }
-    
-    if (includeStats) {
-        include.stats = true;
-    }
-    
-    if (includeReviews) {
-        include.reviews = {
-            take: reviewLimit,
-            orderBy: { createdAt: 'desc' },
-            include: {
-                user: {
-                    select: {
-                        id: true,
-                        fullName: true,
-                        profileImage: true
-                    }
-                }
-            }
-        };
-    }
-    
-    return include;
-}
+        });
 
+        logger.info(`Boutique récupérée avec succès: ${shop.name}`);
 
-// Cette fonction récupère toutes les boutiques créées par l'utilisateur actuellement connecté.
-// Ces boutiques sont affichées sur son profil personnel, depuis lequel il peut accéder à chacune d'elles.
+        return res.status(200).json({
+            success: true,
+            message: "Boutique récupérée avec succès",
+            data: shop
+        });
+    } catch (error) {
+        logger.error(`Erreur lors de la récupération de la boutique par slug: ${error.message}`, {
+            error: error.stack
+        });
 
+        return res.status(500).json({
+            success: false,
+            message: "Une erreur est survenue lors de la récupération de la boutique",
+            error: process.env.NODE_ENV === 'development' ? error.message : "SERVER_ERROR"
+        });
+    }
+};
+/**
+ * Récupère les boutiques de l'utilisateur connecté
+ * @param {Object} req - Requête Express
+ * @param {Object} res - Réponse Express
+ * @returns {Object} Réponse JSON avec les boutiques de l'utilisateur
+ */
 export const getMyStores = async (req, res) => {
     try {
         // Vérifier si l'utilisateur est connecté
@@ -341,7 +402,7 @@ export const getMyStores = async (req, res) => {
             });
         }
 
-        // Récupérer les boutiques dont l'utilisateur est propriétaire
+        // Récupérer les boutiques dont l'utilisateur est propriétaire (optimisé)
         const ownedShops = await prisma.shop.findMany({
             where: {
                 ownerId: req.user.id
@@ -354,15 +415,10 @@ export const getMyStores = async (req, res) => {
                 name: true,
                 slug: true,
                 logo: true,
-                banner: true,
                 shortDescription: true,
                 status: true,
                 category: true,
-                shopType: true,
-                featured: true,
-                verified: true,
                 createdAt: true,
-                updatedAt: true,
                 _count: {
                     select: {
                         products: true,
@@ -372,13 +428,13 @@ export const getMyStores = async (req, res) => {
             }
         });
 
-        // Récupérer les boutiques où l'utilisateur est membre d'équipe (mais pas propriétaire)
+        // Récupérer les boutiques où l'utilisateur est membre d'équipe (optimisé)
         const memberShops = await prisma.shopMember.findMany({
             where: {
                 userId: req.user.id,
                 shop: {
                     ownerId: {
-                        not: req.user.id // Exclure les boutiques dont l'utilisateur est déjà propriétaire
+                        not: req.user.id
                     }
                 }
             },
@@ -391,15 +447,10 @@ export const getMyStores = async (req, res) => {
                         name: true,
                         slug: true,
                         logo: true,
-                        banner: true,
                         shortDescription: true,
                         status: true,
                         category: true,
-                        shopType: true,
-                        featured: true,
-                        verified: true,
                         createdAt: true,
-                        updatedAt: true,
                         _count: {
                             select: {
                                 products: true,
@@ -435,30 +486,95 @@ export const getMyStores = async (req, res) => {
             memberShopsCount: memberShops.length
         });
 
+        // Retourner les boutiques avec un message de succès
         return res.status(200).json({
             success: true,
             message: "Boutiques récupérées avec succès",
-            shops: {
-                owned: formattedOwnedShops,
-                member: formattedMemberShops,
-                all: allShops
-            },
-            counts: {
-                owned: formattedOwnedShops.length,
-                member: formattedMemberShops.length,
-                total: allShops.length
+            data: {
+                shops: allShops,
+                counts: {
+                    total: allShops.length,
+                    owned: formattedOwnedShops.length,
+                    member: formattedMemberShops.length
+                }
             }
         });
     } catch (error) {
-        logger.error('Erreur lors de la récupération des boutiques de l\'utilisateur:', {
-            error: error.message,
-            stack: error.stack,
-            userId: req.user?.id
-        });
-
+        logger.error(`Erreur lors de la récupération des boutiques de l'utilisateur:`, error);
         return res.status(500).json({
             success: false,
-            message: "Erreur lors de la récupération des boutiques",
+            message: "Une erreur est survenue lors de la récupération de vos boutiques",
+            error: process.env.NODE_ENV === 'development' ? error.message : "SERVER_ERROR"
+        });
+    }
+};
+
+/**
+ * Récupère les boutiques populaires ou recommandées
+ * @param {Object} req - Requête Express
+ * @param {Object} res - Réponse Express
+ */
+export const getFeaturedShops = async (req, res) => {
+    try {
+        const { limit = 6, category } = req.query;
+
+        // Construire les conditions de filtrage
+        const where = {
+            status: 'ACTIVE',
+                   featured: true
+        };
+
+        // Ajouter le filtre de catégorie si spécifié
+        if (category) {
+            where.category = category;
+        }
+
+        // Récupérer les boutiques mises en avant
+        const featuredShops = await prisma.shop.findMany({
+            where,
+            take: parseInt(limit),
+            orderBy: [
+                { featured: 'desc' },
+                { createdAt: 'desc' }
+            ],
+            select: {
+                id: true,
+                name: true,
+                slug: true,
+                logo: true,
+                banner: true,
+                shortDescription: true,
+                category: true,
+                verified: true,
+                createdAt: true,
+                owner: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                        profileImage: true
+                    }
+                },
+                _count: {
+                    select: {
+                        products: true,
+                        reviews: true
+                    }
+                }
+            }
+        });
+
+        logger.info(`${featuredShops.length} boutiques mises en avant récupérées`);
+
+        return res.status(200).json({
+            success: true,
+            message: "Boutiques mises en avant récupérées avec succès",
+            data: featuredShops
+        });
+    } catch (error) {
+        logger.error('Erreur lors de la récupération des boutiques mises en avant:', error);
+        return res.status(500).json({
+            success: false,
+            message: "Une erreur est survenue lors de la récupération des boutiques mises en avant",
             error: process.env.NODE_ENV === 'development' ? error.message : "SERVER_ERROR"
         });
     }

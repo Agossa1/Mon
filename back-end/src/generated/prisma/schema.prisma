@@ -380,6 +380,8 @@ model Review {
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  shopId    String? // Gardez-le optionnel si une review peut exister sans shop
+  shop      Shop?   @relation(fields: [shopId], references: [id], onDelete: SetNull)
 
   // Contenu
   rating  Int // 1-5
@@ -518,6 +520,7 @@ model Shop {
   inventories   Inventory[]
   suppliers     Supplier[]
   conversations Conversation[]
+  reviews       Review[]
 
   // Audit
   createdAt DateTime @default(now())

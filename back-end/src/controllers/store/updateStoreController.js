@@ -1,6 +1,6 @@
 import prisma from "../../config/prisma.js";
 import { logger } from "../../utils/logger.js";
-import { generateSlug } from "../../utils/helpers.js";
+
 
 /**
  * Met à jour une boutique existante

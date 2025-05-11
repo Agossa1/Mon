@@ -936,8 +936,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.6.0
-   * Query Engine version: f676762280b54cd07c770017ed3711ddde35f37a
+   * Prisma Client JS version: 6.7.0
+   * Query Engine version: 3cff47a7f5d65c3ea74883f1d736e41d68ce91ed
    */
   export type PrismaVersion = {
     client: string
@@ -4025,6 +4025,7 @@ export namespace Prisma {
     inventories: number
     suppliers: number
     conversations: number
+    reviews: number
   }
 
   export type ShopCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4037,6 +4038,7 @@ export namespace Prisma {
     inventories?: boolean | ShopCountOutputTypeCountInventoriesArgs
     suppliers?: boolean | ShopCountOutputTypeCountSuppliersArgs
     conversations?: boolean | ShopCountOutputTypeCountConversationsArgs
+    reviews?: boolean | ShopCountOutputTypeCountReviewsArgs
   }
 
   // Custom InputTypes
@@ -4111,6 +4113,13 @@ export namespace Prisma {
    */
   export type ShopCountOutputTypeCountConversationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ConversationWhereInput
+  }
+
+  /**
+   * ShopCountOutputType without action
+   */
+  export type ShopCountOutputTypeCountReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReviewWhereInput
   }
 
 
@@ -22206,6 +22215,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     productId: string | null
+    shopId: string | null
     rating: number | null
     title: string | null
     comment: string | null
@@ -22222,6 +22232,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     productId: string | null
+    shopId: string | null
     rating: number | null
     title: string | null
     comment: string | null
@@ -22238,6 +22249,7 @@ export namespace Prisma {
     id: number
     userId: number
     productId: number
+    shopId: number
     rating: number
     title: number
     comment: number
@@ -22269,6 +22281,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     productId?: true
+    shopId?: true
     rating?: true
     title?: true
     comment?: true
@@ -22285,6 +22298,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     productId?: true
+    shopId?: true
     rating?: true
     title?: true
     comment?: true
@@ -22301,6 +22315,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     productId?: true
+    shopId?: true
     rating?: true
     title?: true
     comment?: true
@@ -22405,6 +22420,7 @@ export namespace Prisma {
     id: string
     userId: string
     productId: string
+    shopId: string | null
     rating: number
     title: string | null
     comment: string | null
@@ -22441,6 +22457,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     productId?: boolean
+    shopId?: boolean
     rating?: boolean
     title?: boolean
     comment?: boolean
@@ -22454,12 +22471,14 @@ export namespace Prisma {
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
+    shop?: boolean | Review$shopArgs<ExtArgs>
   }, ExtArgs["result"]["review"]>
 
   export type ReviewSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
     productId?: boolean
+    shopId?: boolean
     rating?: boolean
     title?: boolean
     comment?: boolean
@@ -22473,12 +22492,14 @@ export namespace Prisma {
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
+    shop?: boolean | Review$shopArgs<ExtArgs>
   }, ExtArgs["result"]["review"]>
 
   export type ReviewSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
     productId?: boolean
+    shopId?: boolean
     rating?: boolean
     title?: boolean
     comment?: boolean
@@ -22492,12 +22513,14 @@ export namespace Prisma {
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
+    shop?: boolean | Review$shopArgs<ExtArgs>
   }, ExtArgs["result"]["review"]>
 
   export type ReviewSelectScalar = {
     id?: boolean
     userId?: boolean
     productId?: boolean
+    shopId?: boolean
     rating?: boolean
     title?: boolean
     comment?: boolean
@@ -22511,18 +22534,21 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "productId" | "rating" | "title" | "comment" | "images" | "status" | "moderationComment" | "helpfulCount" | "reportCount" | "isVerifiedPurchase" | "createdAt" | "updatedAt", ExtArgs["result"]["review"]>
+  export type ReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "productId" | "shopId" | "rating" | "title" | "comment" | "images" | "status" | "moderationComment" | "helpfulCount" | "reportCount" | "isVerifiedPurchase" | "createdAt" | "updatedAt", ExtArgs["result"]["review"]>
   export type ReviewInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
+    shop?: boolean | Review$shopArgs<ExtArgs>
   }
   export type ReviewIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
+    shop?: boolean | Review$shopArgs<ExtArgs>
   }
   export type ReviewIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | ProductDefaultArgs<ExtArgs>
+    shop?: boolean | Review$shopArgs<ExtArgs>
   }
 
   export type $ReviewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -22530,11 +22556,13 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
       product: Prisma.$ProductPayload<ExtArgs>
+      shop: Prisma.$ShopPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
       productId: string
+      shopId: string | null
       rating: number
       title: string | null
       comment: string | null
@@ -22942,6 +22970,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    shop<T extends Review$shopArgs<ExtArgs> = {}>(args?: Subset<T, Review$shopArgs<ExtArgs>>): Prisma__ShopClient<$Result.GetResult<Prisma.$ShopPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -22974,6 +23003,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Review", 'String'>
     readonly userId: FieldRef<"Review", 'String'>
     readonly productId: FieldRef<"Review", 'String'>
+    readonly shopId: FieldRef<"Review", 'String'>
     readonly rating: FieldRef<"Review", 'Int'>
     readonly title: FieldRef<"Review", 'String'>
     readonly comment: FieldRef<"Review", 'String'>
@@ -23378,6 +23408,25 @@ export namespace Prisma {
      * Limit how many Reviews to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Review.shop
+   */
+  export type Review$shopArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Shop
+     */
+    select?: ShopSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Shop
+     */
+    omit?: ShopOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopInclude<ExtArgs> | null
+    where?: ShopWhereInput
   }
 
   /**
@@ -25095,6 +25144,7 @@ export namespace Prisma {
     inventories?: boolean | Shop$inventoriesArgs<ExtArgs>
     suppliers?: boolean | Shop$suppliersArgs<ExtArgs>
     conversations?: boolean | Shop$conversationsArgs<ExtArgs>
+    reviews?: boolean | Shop$reviewsArgs<ExtArgs>
     _count?: boolean | ShopCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shop"]>
 
@@ -25280,6 +25330,7 @@ export namespace Prisma {
     inventories?: boolean | Shop$inventoriesArgs<ExtArgs>
     suppliers?: boolean | Shop$suppliersArgs<ExtArgs>
     conversations?: boolean | Shop$conversationsArgs<ExtArgs>
+    reviews?: boolean | Shop$reviewsArgs<ExtArgs>
     _count?: boolean | ShopCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ShopIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -25302,6 +25353,7 @@ export namespace Prisma {
       inventories: Prisma.$InventoryPayload<ExtArgs>[]
       suppliers: Prisma.$SupplierPayload<ExtArgs>[]
       conversations: Prisma.$ConversationPayload<ExtArgs>[]
+      reviews: Prisma.$ReviewPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -25761,6 +25813,7 @@ export namespace Prisma {
     inventories<T extends Shop$inventoriesArgs<ExtArgs> = {}>(args?: Subset<T, Shop$inventoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     suppliers<T extends Shop$suppliersArgs<ExtArgs> = {}>(args?: Subset<T, Shop$suppliersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     conversations<T extends Shop$conversationsArgs<ExtArgs> = {}>(args?: Subset<T, Shop$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reviews<T extends Shop$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, Shop$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -26452,6 +26505,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ConversationScalarFieldEnum | ConversationScalarFieldEnum[]
+  }
+
+  /**
+   * Shop.reviews
+   */
+  export type Shop$reviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Review
+     */
+    select?: ReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Review
+     */
+    omit?: ReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewInclude<ExtArgs> | null
+    where?: ReviewWhereInput
+    orderBy?: ReviewOrderByWithRelationInput | ReviewOrderByWithRelationInput[]
+    cursor?: ReviewWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReviewScalarFieldEnum | ReviewScalarFieldEnum[]
   }
 
   /**
@@ -38562,6 +38639,7 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     productId: 'productId',
+    shopId: 'shopId',
     rating: 'rating',
     title: 'title',
     comment: 'comment',
@@ -40825,6 +40903,7 @@ export namespace Prisma {
     id?: StringFilter<"Review"> | string
     userId?: StringFilter<"Review"> | string
     productId?: StringFilter<"Review"> | string
+    shopId?: StringNullableFilter<"Review"> | string | null
     rating?: IntFilter<"Review"> | number
     title?: StringNullableFilter<"Review"> | string | null
     comment?: StringNullableFilter<"Review"> | string | null
@@ -40838,12 +40917,14 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Review"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
+    shop?: XOR<ShopNullableScalarRelationFilter, ShopWhereInput> | null
   }
 
   export type ReviewOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
     productId?: SortOrder
+    shopId?: SortOrderInput | SortOrder
     rating?: SortOrder
     title?: SortOrderInput | SortOrder
     comment?: SortOrderInput | SortOrder
@@ -40857,6 +40938,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
     product?: ProductOrderByWithRelationInput
+    shop?: ShopOrderByWithRelationInput
   }
 
   export type ReviewWhereUniqueInput = Prisma.AtLeast<{
@@ -40867,6 +40949,7 @@ export namespace Prisma {
     NOT?: ReviewWhereInput | ReviewWhereInput[]
     userId?: StringFilter<"Review"> | string
     productId?: StringFilter<"Review"> | string
+    shopId?: StringNullableFilter<"Review"> | string | null
     rating?: IntFilter<"Review"> | number
     title?: StringNullableFilter<"Review"> | string | null
     comment?: StringNullableFilter<"Review"> | string | null
@@ -40880,12 +40963,14 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Review"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
+    shop?: XOR<ShopNullableScalarRelationFilter, ShopWhereInput> | null
   }, "id" | "userId_productId">
 
   export type ReviewOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
     productId?: SortOrder
+    shopId?: SortOrderInput | SortOrder
     rating?: SortOrder
     title?: SortOrderInput | SortOrder
     comment?: SortOrderInput | SortOrder
@@ -40911,6 +40996,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Review"> | string
     userId?: StringWithAggregatesFilter<"Review"> | string
     productId?: StringWithAggregatesFilter<"Review"> | string
+    shopId?: StringNullableWithAggregatesFilter<"Review"> | string | null
     rating?: IntWithAggregatesFilter<"Review"> | number
     title?: StringNullableWithAggregatesFilter<"Review"> | string | null
     comment?: StringNullableWithAggregatesFilter<"Review"> | string | null
@@ -41076,6 +41162,7 @@ export namespace Prisma {
     inventories?: InventoryListRelationFilter
     suppliers?: SupplierListRelationFilter
     conversations?: ConversationListRelationFilter
+    reviews?: ReviewListRelationFilter
   }
 
   export type ShopOrderByWithRelationInput = {
@@ -41142,6 +41229,7 @@ export namespace Prisma {
     inventories?: InventoryOrderByRelationAggregateInput
     suppliers?: SupplierOrderByRelationAggregateInput
     conversations?: ConversationOrderByRelationAggregateInput
+    reviews?: ReviewOrderByRelationAggregateInput
   }
 
   export type ShopWhereUniqueInput = Prisma.AtLeast<{
@@ -41211,6 +41299,7 @@ export namespace Prisma {
     inventories?: InventoryListRelationFilter
     suppliers?: SupplierListRelationFilter
     conversations?: ConversationListRelationFilter
+    reviews?: ReviewListRelationFilter
   }, "id" | "slug">
 
   export type ShopOrderByWithAggregationInput = {
@@ -44048,12 +44137,14 @@ export namespace Prisma {
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutReviewsInput
     product: ProductCreateNestedOneWithoutReviewsInput
+    shop?: ShopCreateNestedOneWithoutReviewsInput
   }
 
   export type ReviewUncheckedCreateInput = {
     id?: string
     userId: string
     productId: string
+    shopId?: string | null
     rating: number
     title?: string | null
     comment?: string | null
@@ -44082,12 +44173,14 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutReviewsNestedInput
     product?: ProductUpdateOneRequiredWithoutReviewsNestedInput
+    shop?: ShopUpdateOneWithoutReviewsNestedInput
   }
 
   export type ReviewUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
+    shopId?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
     comment?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44105,6 +44198,7 @@ export namespace Prisma {
     id?: string
     userId: string
     productId: string
+    shopId?: string | null
     rating: number
     title?: string | null
     comment?: string | null
@@ -44137,6 +44231,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
+    shopId?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
     comment?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44310,6 +44405,7 @@ export namespace Prisma {
     inventories?: InventoryCreateNestedManyWithoutShopInput
     suppliers?: SupplierCreateNestedManyWithoutShopInput
     conversations?: ConversationCreateNestedManyWithoutShopInput
+    reviews?: ReviewCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateInput = {
@@ -44375,6 +44471,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedCreateNestedManyWithoutShopInput
     suppliers?: SupplierUncheckedCreateNestedManyWithoutShopInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutShopInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopUpdateInput = {
@@ -44440,6 +44537,7 @@ export namespace Prisma {
     inventories?: InventoryUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUpdateManyWithoutShopNestedInput
     conversations?: ConversationUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateInput = {
@@ -44505,6 +44603,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUncheckedUpdateManyWithoutShopNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type ShopCreateManyInput = {
@@ -47251,6 +47350,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     productId?: SortOrder
+    shopId?: SortOrder
     rating?: SortOrder
     title?: SortOrder
     comment?: SortOrder
@@ -47274,6 +47374,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     productId?: SortOrder
+    shopId?: SortOrder
     rating?: SortOrder
     title?: SortOrder
     comment?: SortOrder
@@ -47290,6 +47391,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     productId?: SortOrder
+    shopId?: SortOrder
     rating?: SortOrder
     title?: SortOrder
     comment?: SortOrder
@@ -50015,6 +50117,12 @@ export namespace Prisma {
     connect?: ProductWhereUniqueInput
   }
 
+  export type ShopCreateNestedOneWithoutReviewsInput = {
+    create?: XOR<ShopCreateWithoutReviewsInput, ShopUncheckedCreateWithoutReviewsInput>
+    connectOrCreate?: ShopCreateOrConnectWithoutReviewsInput
+    connect?: ShopWhereUniqueInput
+  }
+
   export type ReviewUpdateimagesInput = {
     set?: InputJsonValue[]
     push?: InputJsonValue | InputJsonValue[]
@@ -50038,6 +50146,16 @@ export namespace Prisma {
     upsert?: ProductUpsertWithoutReviewsInput
     connect?: ProductWhereUniqueInput
     update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutReviewsInput, ProductUpdateWithoutReviewsInput>, ProductUncheckedUpdateWithoutReviewsInput>
+  }
+
+  export type ShopUpdateOneWithoutReviewsNestedInput = {
+    create?: XOR<ShopCreateWithoutReviewsInput, ShopUncheckedCreateWithoutReviewsInput>
+    connectOrCreate?: ShopCreateOrConnectWithoutReviewsInput
+    upsert?: ShopUpsertWithoutReviewsInput
+    disconnect?: ShopWhereInput | boolean
+    delete?: ShopWhereInput | boolean
+    connect?: ShopWhereUniqueInput
+    update?: XOR<XOR<ShopUpdateToOneWithWhereWithoutReviewsInput, ShopUpdateWithoutReviewsInput>, ShopUncheckedUpdateWithoutReviewsInput>
   }
 
   export type UserCreateNestedOneWithoutNotificationsInput = {
@@ -50134,6 +50252,13 @@ export namespace Prisma {
     connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
   }
 
+  export type ReviewCreateNestedManyWithoutShopInput = {
+    create?: XOR<ReviewCreateWithoutShopInput, ReviewUncheckedCreateWithoutShopInput> | ReviewCreateWithoutShopInput[] | ReviewUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: ReviewCreateOrConnectWithoutShopInput | ReviewCreateOrConnectWithoutShopInput[]
+    createMany?: ReviewCreateManyShopInputEnvelope
+    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+  }
+
   export type ProductUncheckedCreateNestedManyWithoutShopInput = {
     create?: XOR<ProductCreateWithoutShopInput, ProductUncheckedCreateWithoutShopInput> | ProductCreateWithoutShopInput[] | ProductUncheckedCreateWithoutShopInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutShopInput | ProductCreateOrConnectWithoutShopInput[]
@@ -50194,6 +50319,13 @@ export namespace Prisma {
     connectOrCreate?: ConversationCreateOrConnectWithoutShopInput | ConversationCreateOrConnectWithoutShopInput[]
     createMany?: ConversationCreateManyShopInputEnvelope
     connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+  }
+
+  export type ReviewUncheckedCreateNestedManyWithoutShopInput = {
+    create?: XOR<ReviewCreateWithoutShopInput, ReviewUncheckedCreateWithoutShopInput> | ReviewCreateWithoutShopInput[] | ReviewUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: ReviewCreateOrConnectWithoutShopInput | ReviewCreateOrConnectWithoutShopInput[]
+    createMany?: ReviewCreateManyShopInputEnvelope
+    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
   }
 
   export type EnumShopTypeFieldUpdateOperationsInput = {
@@ -50360,6 +50492,20 @@ export namespace Prisma {
     deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
   }
 
+  export type ReviewUpdateManyWithoutShopNestedInput = {
+    create?: XOR<ReviewCreateWithoutShopInput, ReviewUncheckedCreateWithoutShopInput> | ReviewCreateWithoutShopInput[] | ReviewUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: ReviewCreateOrConnectWithoutShopInput | ReviewCreateOrConnectWithoutShopInput[]
+    upsert?: ReviewUpsertWithWhereUniqueWithoutShopInput | ReviewUpsertWithWhereUniqueWithoutShopInput[]
+    createMany?: ReviewCreateManyShopInputEnvelope
+    set?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    disconnect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    delete?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    update?: ReviewUpdateWithWhereUniqueWithoutShopInput | ReviewUpdateWithWhereUniqueWithoutShopInput[]
+    updateMany?: ReviewUpdateManyWithWhereWithoutShopInput | ReviewUpdateManyWithWhereWithoutShopInput[]
+    deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
+  }
+
   export type ProductUncheckedUpdateManyWithoutShopNestedInput = {
     create?: XOR<ProductCreateWithoutShopInput, ProductUncheckedCreateWithoutShopInput> | ProductCreateWithoutShopInput[] | ProductUncheckedCreateWithoutShopInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutShopInput | ProductCreateOrConnectWithoutShopInput[]
@@ -50483,6 +50629,20 @@ export namespace Prisma {
     update?: ConversationUpdateWithWhereUniqueWithoutShopInput | ConversationUpdateWithWhereUniqueWithoutShopInput[]
     updateMany?: ConversationUpdateManyWithWhereWithoutShopInput | ConversationUpdateManyWithWhereWithoutShopInput[]
     deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
+  }
+
+  export type ReviewUncheckedUpdateManyWithoutShopNestedInput = {
+    create?: XOR<ReviewCreateWithoutShopInput, ReviewUncheckedCreateWithoutShopInput> | ReviewCreateWithoutShopInput[] | ReviewUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: ReviewCreateOrConnectWithoutShopInput | ReviewCreateOrConnectWithoutShopInput[]
+    upsert?: ReviewUpsertWithWhereUniqueWithoutShopInput | ReviewUpsertWithWhereUniqueWithoutShopInput[]
+    createMany?: ReviewCreateManyShopInputEnvelope
+    set?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    disconnect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    delete?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    update?: ReviewUpdateWithWhereUniqueWithoutShopInput | ReviewUpdateWithWhereUniqueWithoutShopInput[]
+    updateMany?: ReviewUpdateManyWithWhereWithoutShopInput | ReviewUpdateManyWithWhereWithoutShopInput[]
+    deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
   }
 
   export type CouponCreateproductIdsInput = {
@@ -51894,6 +52054,7 @@ export namespace Prisma {
     inventories?: InventoryCreateNestedManyWithoutShopInput
     suppliers?: SupplierCreateNestedManyWithoutShopInput
     conversations?: ConversationCreateNestedManyWithoutShopInput
+    reviews?: ReviewCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateWithoutOwnerInput = {
@@ -51958,6 +52119,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedCreateNestedManyWithoutShopInput
     suppliers?: SupplierUncheckedCreateNestedManyWithoutShopInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutShopInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopCreateOrConnectWithoutOwnerInput = {
@@ -51984,11 +52146,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     product: ProductCreateNestedOneWithoutReviewsInput
+    shop?: ShopCreateNestedOneWithoutReviewsInput
   }
 
   export type ReviewUncheckedCreateWithoutUserInput = {
     id?: string
     productId: string
+    shopId?: string | null
     rating: number
     title?: string | null
     comment?: string | null
@@ -52319,6 +52483,7 @@ export namespace Prisma {
     inventories?: InventoryCreateNestedManyWithoutShopInput
     suppliers?: SupplierCreateNestedManyWithoutShopInput
     conversations?: ConversationCreateNestedManyWithoutShopInput
+    reviews?: ReviewCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateWithoutFollowersInput = {
@@ -52383,6 +52548,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedCreateNestedManyWithoutShopInput
     suppliers?: SupplierUncheckedCreateNestedManyWithoutShopInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutShopInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopCreateOrConnectWithoutFollowersInput = {
@@ -52670,6 +52836,7 @@ export namespace Prisma {
     id?: StringFilter<"Review"> | string
     userId?: StringFilter<"Review"> | string
     productId?: StringFilter<"Review"> | string
+    shopId?: StringNullableFilter<"Review"> | string | null
     rating?: IntFilter<"Review"> | number
     title?: StringNullableFilter<"Review"> | string | null
     comment?: StringNullableFilter<"Review"> | string | null
@@ -53928,6 +54095,7 @@ export namespace Prisma {
     inventories?: InventoryCreateNestedManyWithoutShopInput
     suppliers?: SupplierCreateNestedManyWithoutShopInput
     conversations?: ConversationCreateNestedManyWithoutShopInput
+    reviews?: ReviewCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateWithoutProductsInput = {
@@ -53992,6 +54160,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedCreateNestedManyWithoutShopInput
     suppliers?: SupplierUncheckedCreateNestedManyWithoutShopInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutShopInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopCreateOrConnectWithoutProductsInput = {
@@ -54092,11 +54261,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutReviewsInput
+    shop?: ShopCreateNestedOneWithoutReviewsInput
   }
 
   export type ReviewUncheckedCreateWithoutProductInput = {
     id?: string
     userId: string
+    shopId?: string | null
     rating: number
     title?: string | null
     comment?: string | null
@@ -54367,6 +54538,7 @@ export namespace Prisma {
     inventories?: InventoryUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUpdateManyWithoutShopNestedInput
     conversations?: ConversationUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateWithoutProductsInput = {
@@ -54431,6 +54603,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUncheckedUpdateManyWithoutShopNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type CategoryUpsertWithWhereUniqueWithoutProductsInput = {
@@ -56136,6 +56309,7 @@ export namespace Prisma {
     inventories?: InventoryCreateNestedManyWithoutShopInput
     suppliers?: SupplierCreateNestedManyWithoutShopInput
     conversations?: ConversationCreateNestedManyWithoutShopInput
+    reviews?: ReviewCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateWithoutOrdersInput = {
@@ -56200,6 +56374,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedCreateNestedManyWithoutShopInput
     suppliers?: SupplierUncheckedCreateNestedManyWithoutShopInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutShopInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopCreateOrConnectWithoutOrdersInput = {
@@ -56430,6 +56605,7 @@ export namespace Prisma {
     inventories?: InventoryUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUpdateManyWithoutShopNestedInput
     conversations?: ConversationUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateWithoutOrdersInput = {
@@ -56494,6 +56670,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUncheckedUpdateManyWithoutShopNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type OrderCreateWithoutItemsInput = {
@@ -57272,6 +57449,141 @@ export namespace Prisma {
     create: XOR<ProductCreateWithoutReviewsInput, ProductUncheckedCreateWithoutReviewsInput>
   }
 
+  export type ShopCreateWithoutReviewsInput = {
+    id?: string
+    name: string
+    slug: string
+    shopType: $Enums.ShopType
+    description?: string | null
+    shortDescription?: string | null
+    logo?: string | null
+    banner?: string | null
+    colors?: NullableJsonNullValueInput | InputJsonValue
+    category: $Enums.ShopCategory
+    subCategories?: ShopCreatesubCategoriesInput | string[]
+    tags?: ShopCreatetagsInput | string[]
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
+    firstName: string
+    lastName: string
+    dateOfBirth?: Date | string | null
+    identityType?: $Enums.IdentityType | null
+    identityNumber?: string | null
+    identityDocument?: string | null
+    identityVerified?: boolean
+    businessName?: string | null
+    taxId?: string | null
+    registrationNumber?: string | null
+    businessDocument?: string | null
+    businessVerified?: boolean
+    email: string
+    phone?: string | null
+    website?: string | null
+    socialMedia?: NullableJsonNullValueInput | InputJsonValue
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
+    coordinates?: NullableJsonNullValueInput | InputJsonValue
+    currency?: string
+    languages?: ShopCreatelanguagesInput | string[]
+    timeZone?: string
+    shippingMethods?: NullableJsonNullValueInput | InputJsonValue
+    shippingZones?: NullableJsonNullValueInput | InputJsonValue
+    paymentMethods?: NullableJsonNullValueInput | InputJsonValue
+    bankAccount?: NullableJsonNullValueInput | InputJsonValue
+    rating?: number | null
+    reviewCount?: number
+    salesCount?: number
+    productCount?: number
+    followerCount?: number
+    status?: $Enums.ShopStatus
+    featured?: boolean
+    verified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutShopsInput
+    products?: ProductCreateNestedManyWithoutShopInput
+    orders?: OrderCreateNestedManyWithoutShopInput
+    followers?: UserCreateNestedManyWithoutFollowedShopsInput
+    coupons?: CouponCreateNestedManyWithoutShopInput
+    members?: ShopMemberCreateNestedManyWithoutShopInput
+    invitations?: ShopInvitationCreateNestedManyWithoutShopInput
+    inventories?: InventoryCreateNestedManyWithoutShopInput
+    suppliers?: SupplierCreateNestedManyWithoutShopInput
+    conversations?: ConversationCreateNestedManyWithoutShopInput
+  }
+
+  export type ShopUncheckedCreateWithoutReviewsInput = {
+    id?: string
+    name: string
+    slug: string
+    shopType: $Enums.ShopType
+    description?: string | null
+    shortDescription?: string | null
+    logo?: string | null
+    banner?: string | null
+    colors?: NullableJsonNullValueInput | InputJsonValue
+    category: $Enums.ShopCategory
+    subCategories?: ShopCreatesubCategoriesInput | string[]
+    tags?: ShopCreatetagsInput | string[]
+    ownerId: string
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
+    firstName: string
+    lastName: string
+    dateOfBirth?: Date | string | null
+    identityType?: $Enums.IdentityType | null
+    identityNumber?: string | null
+    identityDocument?: string | null
+    identityVerified?: boolean
+    businessName?: string | null
+    taxId?: string | null
+    registrationNumber?: string | null
+    businessDocument?: string | null
+    businessVerified?: boolean
+    email: string
+    phone?: string | null
+    website?: string | null
+    socialMedia?: NullableJsonNullValueInput | InputJsonValue
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
+    coordinates?: NullableJsonNullValueInput | InputJsonValue
+    currency?: string
+    languages?: ShopCreatelanguagesInput | string[]
+    timeZone?: string
+    shippingMethods?: NullableJsonNullValueInput | InputJsonValue
+    shippingZones?: NullableJsonNullValueInput | InputJsonValue
+    paymentMethods?: NullableJsonNullValueInput | InputJsonValue
+    bankAccount?: NullableJsonNullValueInput | InputJsonValue
+    rating?: number | null
+    reviewCount?: number
+    salesCount?: number
+    productCount?: number
+    followerCount?: number
+    status?: $Enums.ShopStatus
+    featured?: boolean
+    verified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    products?: ProductUncheckedCreateNestedManyWithoutShopInput
+    orders?: OrderUncheckedCreateNestedManyWithoutShopInput
+    followers?: UserUncheckedCreateNestedManyWithoutFollowedShopsInput
+    coupons?: CouponUncheckedCreateNestedManyWithoutShopInput
+    members?: ShopMemberUncheckedCreateNestedManyWithoutShopInput
+    invitations?: ShopInvitationUncheckedCreateNestedManyWithoutShopInput
+    inventories?: InventoryUncheckedCreateNestedManyWithoutShopInput
+    suppliers?: SupplierUncheckedCreateNestedManyWithoutShopInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutShopInput
+  }
+
+  export type ShopCreateOrConnectWithoutReviewsInput = {
+    where: ShopWhereUniqueInput
+    create: XOR<ShopCreateWithoutReviewsInput, ShopUncheckedCreateWithoutReviewsInput>
+  }
+
   export type UserUpsertWithoutReviewsInput = {
     update: XOR<UserUpdateWithoutReviewsInput, UserUncheckedUpdateWithoutReviewsInput>
     create: XOR<UserCreateWithoutReviewsInput, UserUncheckedCreateWithoutReviewsInput>
@@ -57442,6 +57754,147 @@ export namespace Prisma {
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutProductNestedInput
     inventoryItems?: InventoryUncheckedUpdateManyWithoutProductNestedInput
     supplierProducts?: SupplierProductUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ShopUpsertWithoutReviewsInput = {
+    update: XOR<ShopUpdateWithoutReviewsInput, ShopUncheckedUpdateWithoutReviewsInput>
+    create: XOR<ShopCreateWithoutReviewsInput, ShopUncheckedCreateWithoutReviewsInput>
+    where?: ShopWhereInput
+  }
+
+  export type ShopUpdateToOneWithWhereWithoutReviewsInput = {
+    where?: ShopWhereInput
+    data: XOR<ShopUpdateWithoutReviewsInput, ShopUncheckedUpdateWithoutReviewsInput>
+  }
+
+  export type ShopUpdateWithoutReviewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    shopType?: EnumShopTypeFieldUpdateOperationsInput | $Enums.ShopType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
+    colors?: NullableJsonNullValueInput | InputJsonValue
+    category?: EnumShopCategoryFieldUpdateOperationsInput | $Enums.ShopCategory
+    subCategories?: ShopUpdatesubCategoriesInput | string[]
+    tags?: ShopUpdatetagsInput | string[]
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    identityType?: NullableEnumIdentityTypeFieldUpdateOperationsInput | $Enums.IdentityType | null
+    identityNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    identityDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    identityVerified?: BoolFieldUpdateOperationsInput | boolean
+    businessName?: NullableStringFieldUpdateOperationsInput | string | null
+    taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    businessDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    businessVerified?: BoolFieldUpdateOperationsInput | boolean
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    socialMedia?: NullableJsonNullValueInput | InputJsonValue
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    coordinates?: NullableJsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
+    languages?: ShopUpdatelanguagesInput | string[]
+    timeZone?: StringFieldUpdateOperationsInput | string
+    shippingMethods?: NullableJsonNullValueInput | InputJsonValue
+    shippingZones?: NullableJsonNullValueInput | InputJsonValue
+    paymentMethods?: NullableJsonNullValueInput | InputJsonValue
+    bankAccount?: NullableJsonNullValueInput | InputJsonValue
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    reviewCount?: IntFieldUpdateOperationsInput | number
+    salesCount?: IntFieldUpdateOperationsInput | number
+    productCount?: IntFieldUpdateOperationsInput | number
+    followerCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+    featured?: BoolFieldUpdateOperationsInput | boolean
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutShopsNestedInput
+    products?: ProductUpdateManyWithoutShopNestedInput
+    orders?: OrderUpdateManyWithoutShopNestedInput
+    followers?: UserUpdateManyWithoutFollowedShopsNestedInput
+    coupons?: CouponUpdateManyWithoutShopNestedInput
+    members?: ShopMemberUpdateManyWithoutShopNestedInput
+    invitations?: ShopInvitationUpdateManyWithoutShopNestedInput
+    inventories?: InventoryUpdateManyWithoutShopNestedInput
+    suppliers?: SupplierUpdateManyWithoutShopNestedInput
+    conversations?: ConversationUpdateManyWithoutShopNestedInput
+  }
+
+  export type ShopUncheckedUpdateWithoutReviewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    shopType?: EnumShopTypeFieldUpdateOperationsInput | $Enums.ShopType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    banner?: NullableStringFieldUpdateOperationsInput | string | null
+    colors?: NullableJsonNullValueInput | InputJsonValue
+    category?: EnumShopCategoryFieldUpdateOperationsInput | $Enums.ShopCategory
+    subCategories?: ShopUpdatesubCategoriesInput | string[]
+    tags?: ShopUpdatetagsInput | string[]
+    ownerId?: StringFieldUpdateOperationsInput | string
+    teamMembers?: NullableJsonNullValueInput | InputJsonValue
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    identityType?: NullableEnumIdentityTypeFieldUpdateOperationsInput | $Enums.IdentityType | null
+    identityNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    identityDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    identityVerified?: BoolFieldUpdateOperationsInput | boolean
+    businessName?: NullableStringFieldUpdateOperationsInput | string | null
+    taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    businessDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    businessVerified?: BoolFieldUpdateOperationsInput | boolean
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    socialMedia?: NullableJsonNullValueInput | InputJsonValue
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    coordinates?: NullableJsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
+    languages?: ShopUpdatelanguagesInput | string[]
+    timeZone?: StringFieldUpdateOperationsInput | string
+    shippingMethods?: NullableJsonNullValueInput | InputJsonValue
+    shippingZones?: NullableJsonNullValueInput | InputJsonValue
+    paymentMethods?: NullableJsonNullValueInput | InputJsonValue
+    bankAccount?: NullableJsonNullValueInput | InputJsonValue
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    reviewCount?: IntFieldUpdateOperationsInput | number
+    salesCount?: IntFieldUpdateOperationsInput | number
+    productCount?: IntFieldUpdateOperationsInput | number
+    followerCount?: IntFieldUpdateOperationsInput | number
+    status?: EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+    featured?: BoolFieldUpdateOperationsInput | boolean
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    products?: ProductUncheckedUpdateManyWithoutShopNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutShopNestedInput
+    followers?: UserUncheckedUpdateManyWithoutFollowedShopsNestedInput
+    coupons?: CouponUncheckedUpdateManyWithoutShopNestedInput
+    members?: ShopMemberUncheckedUpdateManyWithoutShopNestedInput
+    invitations?: ShopInvitationUncheckedUpdateManyWithoutShopNestedInput
+    inventories?: InventoryUncheckedUpdateManyWithoutShopNestedInput
+    suppliers?: SupplierUncheckedUpdateManyWithoutShopNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -58102,6 +58555,50 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ReviewCreateWithoutShopInput = {
+    id?: string
+    rating: number
+    title?: string | null
+    comment?: string | null
+    images?: ReviewCreateimagesInput | InputJsonValue[]
+    status?: $Enums.ReviewStatus
+    moderationComment?: string | null
+    helpfulCount?: number
+    reportCount?: number
+    isVerifiedPurchase?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutReviewsInput
+    product: ProductCreateNestedOneWithoutReviewsInput
+  }
+
+  export type ReviewUncheckedCreateWithoutShopInput = {
+    id?: string
+    userId: string
+    productId: string
+    rating: number
+    title?: string | null
+    comment?: string | null
+    images?: ReviewCreateimagesInput | InputJsonValue[]
+    status?: $Enums.ReviewStatus
+    moderationComment?: string | null
+    helpfulCount?: number
+    reportCount?: number
+    isVerifiedPurchase?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReviewCreateOrConnectWithoutShopInput = {
+    where: ReviewWhereUniqueInput
+    create: XOR<ReviewCreateWithoutShopInput, ReviewUncheckedCreateWithoutShopInput>
+  }
+
+  export type ReviewCreateManyShopInputEnvelope = {
+    data: ReviewCreateManyShopInput | ReviewCreateManyShopInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutShopsInput = {
     update: XOR<UserUpdateWithoutShopsInput, UserUncheckedUpdateWithoutShopsInput>
     create: XOR<UserCreateWithoutShopsInput, UserUncheckedCreateWithoutShopsInput>
@@ -58407,6 +58904,22 @@ export namespace Prisma {
     shopId?: StringNullableFilter<"Conversation"> | string | null
   }
 
+  export type ReviewUpsertWithWhereUniqueWithoutShopInput = {
+    where: ReviewWhereUniqueInput
+    update: XOR<ReviewUpdateWithoutShopInput, ReviewUncheckedUpdateWithoutShopInput>
+    create: XOR<ReviewCreateWithoutShopInput, ReviewUncheckedCreateWithoutShopInput>
+  }
+
+  export type ReviewUpdateWithWhereUniqueWithoutShopInput = {
+    where: ReviewWhereUniqueInput
+    data: XOR<ReviewUpdateWithoutShopInput, ReviewUncheckedUpdateWithoutShopInput>
+  }
+
+  export type ReviewUpdateManyWithWhereWithoutShopInput = {
+    where: ReviewScalarWhereInput
+    data: XOR<ReviewUpdateManyMutationInput, ReviewUncheckedUpdateManyWithoutShopInput>
+  }
+
   export type ShopCreateWithoutCouponsInput = {
     id?: string
     name: string
@@ -58469,6 +58982,7 @@ export namespace Prisma {
     inventories?: InventoryCreateNestedManyWithoutShopInput
     suppliers?: SupplierCreateNestedManyWithoutShopInput
     conversations?: ConversationCreateNestedManyWithoutShopInput
+    reviews?: ReviewCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateWithoutCouponsInput = {
@@ -58533,6 +59047,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedCreateNestedManyWithoutShopInput
     suppliers?: SupplierUncheckedCreateNestedManyWithoutShopInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutShopInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopCreateOrConnectWithoutCouponsInput = {
@@ -58613,6 +59128,7 @@ export namespace Prisma {
     inventories?: InventoryUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUpdateManyWithoutShopNestedInput
     conversations?: ConversationUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateWithoutCouponsInput = {
@@ -58677,6 +59193,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUncheckedUpdateManyWithoutShopNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type ConversationParticipantCreateWithoutConversationInput = {
@@ -58811,6 +59328,7 @@ export namespace Prisma {
     invitations?: ShopInvitationCreateNestedManyWithoutShopInput
     inventories?: InventoryCreateNestedManyWithoutShopInput
     suppliers?: SupplierCreateNestedManyWithoutShopInput
+    reviews?: ReviewCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateWithoutConversationsInput = {
@@ -58875,6 +59393,7 @@ export namespace Prisma {
     invitations?: ShopInvitationUncheckedCreateNestedManyWithoutShopInput
     inventories?: InventoryUncheckedCreateNestedManyWithoutShopInput
     suppliers?: SupplierUncheckedCreateNestedManyWithoutShopInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopCreateOrConnectWithoutConversationsInput = {
@@ -58987,6 +59506,7 @@ export namespace Prisma {
     invitations?: ShopInvitationUpdateManyWithoutShopNestedInput
     inventories?: InventoryUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateWithoutConversationsInput = {
@@ -59051,6 +59571,7 @@ export namespace Prisma {
     invitations?: ShopInvitationUncheckedUpdateManyWithoutShopNestedInput
     inventories?: InventoryUncheckedUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUncheckedUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type ConversationCreateWithoutParticipantsInput = {
@@ -59623,6 +60144,7 @@ export namespace Prisma {
     inventories?: InventoryCreateNestedManyWithoutShopInput
     suppliers?: SupplierCreateNestedManyWithoutShopInput
     conversations?: ConversationCreateNestedManyWithoutShopInput
+    reviews?: ReviewCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateWithoutMembersInput = {
@@ -59687,6 +60209,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedCreateNestedManyWithoutShopInput
     suppliers?: SupplierUncheckedCreateNestedManyWithoutShopInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutShopInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopCreateOrConnectWithoutMembersInput = {
@@ -59830,6 +60353,7 @@ export namespace Prisma {
     inventories?: InventoryUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUpdateManyWithoutShopNestedInput
     conversations?: ConversationUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateWithoutMembersInput = {
@@ -59894,6 +60418,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUncheckedUpdateManyWithoutShopNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type UserUpsertWithoutShopMembershipsInput = {
@@ -60027,6 +60552,7 @@ export namespace Prisma {
     inventories?: InventoryCreateNestedManyWithoutShopInput
     suppliers?: SupplierCreateNestedManyWithoutShopInput
     conversations?: ConversationCreateNestedManyWithoutShopInput
+    reviews?: ReviewCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateWithoutInvitationsInput = {
@@ -60091,6 +60617,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedCreateNestedManyWithoutShopInput
     suppliers?: SupplierUncheckedCreateNestedManyWithoutShopInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutShopInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopCreateOrConnectWithoutInvitationsInput = {
@@ -60171,6 +60698,7 @@ export namespace Prisma {
     inventories?: InventoryUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUpdateManyWithoutShopNestedInput
     conversations?: ConversationUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateWithoutInvitationsInput = {
@@ -60235,6 +60763,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUncheckedUpdateManyWithoutShopNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type ShopCreateWithoutInventoriesInput = {
@@ -60299,6 +60828,7 @@ export namespace Prisma {
     invitations?: ShopInvitationCreateNestedManyWithoutShopInput
     suppliers?: SupplierCreateNestedManyWithoutShopInput
     conversations?: ConversationCreateNestedManyWithoutShopInput
+    reviews?: ReviewCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateWithoutInventoriesInput = {
@@ -60363,6 +60893,7 @@ export namespace Prisma {
     invitations?: ShopInvitationUncheckedCreateNestedManyWithoutShopInput
     suppliers?: SupplierUncheckedCreateNestedManyWithoutShopInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutShopInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopCreateOrConnectWithoutInventoriesInput = {
@@ -60611,6 +61142,7 @@ export namespace Prisma {
     invitations?: ShopInvitationUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUpdateManyWithoutShopNestedInput
     conversations?: ConversationUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateWithoutInventoriesInput = {
@@ -60675,6 +61207,7 @@ export namespace Prisma {
     invitations?: ShopInvitationUncheckedUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUncheckedUpdateManyWithoutShopNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type ProductUpsertWithoutInventoryItemsInput = {
@@ -60994,6 +61527,7 @@ export namespace Prisma {
     invitations?: ShopInvitationCreateNestedManyWithoutShopInput
     inventories?: InventoryCreateNestedManyWithoutShopInput
     conversations?: ConversationCreateNestedManyWithoutShopInput
+    reviews?: ReviewCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateWithoutSuppliersInput = {
@@ -61058,6 +61592,7 @@ export namespace Prisma {
     invitations?: ShopInvitationUncheckedCreateNestedManyWithoutShopInput
     inventories?: InventoryUncheckedCreateNestedManyWithoutShopInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutShopInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopCreateOrConnectWithoutSuppliersInput = {
@@ -61174,6 +61709,7 @@ export namespace Prisma {
     invitations?: ShopInvitationUpdateManyWithoutShopNestedInput
     inventories?: InventoryUpdateManyWithoutShopNestedInput
     conversations?: ConversationUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateWithoutSuppliersInput = {
@@ -61238,6 +61774,7 @@ export namespace Prisma {
     invitations?: ShopInvitationUncheckedUpdateManyWithoutShopNestedInput
     inventories?: InventoryUncheckedUpdateManyWithoutShopNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type SupplierProductUpsertWithWhereUniqueWithoutSupplierInput = {
@@ -61615,6 +62152,7 @@ export namespace Prisma {
   export type ReviewCreateManyUserInput = {
     id?: string
     productId: string
+    shopId?: string | null
     rating: number
     title?: string | null
     comment?: string | null
@@ -61827,6 +62365,7 @@ export namespace Prisma {
     inventories?: InventoryUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUpdateManyWithoutShopNestedInput
     conversations?: ConversationUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateWithoutOwnerInput = {
@@ -61891,6 +62430,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUncheckedUpdateManyWithoutShopNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateManyWithoutOwnerInput = {
@@ -61962,11 +62502,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: ProductUpdateOneRequiredWithoutReviewsNestedInput
+    shop?: ShopUpdateOneWithoutReviewsNestedInput
   }
 
   export type ReviewUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
+    shopId?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
     comment?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61983,6 +62525,7 @@ export namespace Prisma {
   export type ReviewUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
+    shopId?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
     comment?: NullableStringFieldUpdateOperationsInput | string | null
@@ -62294,6 +62837,7 @@ export namespace Prisma {
     inventories?: InventoryUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUpdateManyWithoutShopNestedInput
     conversations?: ConversationUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateWithoutFollowersInput = {
@@ -62358,6 +62902,7 @@ export namespace Prisma {
     inventories?: InventoryUncheckedUpdateManyWithoutShopNestedInput
     suppliers?: SupplierUncheckedUpdateManyWithoutShopNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutShopNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateManyWithoutFollowersInput = {
@@ -62892,6 +63437,7 @@ export namespace Prisma {
   export type ReviewCreateManyProductInput = {
     id?: string
     userId: string
+    shopId?: string | null
     rating: number
     title?: string | null
     comment?: string | null
@@ -63072,11 +63618,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutReviewsNestedInput
+    shop?: ShopUpdateOneWithoutReviewsNestedInput
   }
 
   export type ReviewUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    shopId?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
     comment?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63093,6 +63641,7 @@ export namespace Prisma {
   export type ReviewUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    shopId?: NullableStringFieldUpdateOperationsInput | string | null
     rating?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
     comment?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63775,6 +64324,23 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ReviewCreateManyShopInput = {
+    id?: string
+    userId: string
+    productId: string
+    rating: number
+    title?: string | null
+    comment?: string | null
+    images?: ReviewCreateimagesInput | InputJsonValue[]
+    status?: $Enums.ReviewStatus
+    moderationComment?: string | null
+    helpfulCount?: number
+    reportCount?: number
+    isVerifiedPurchase?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ProductUpdateWithoutShopInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -64311,6 +64877,57 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReviewUpdateWithoutShopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: ReviewUpdateimagesInput | InputJsonValue[]
+    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    moderationComment?: NullableStringFieldUpdateOperationsInput | string | null
+    helpfulCount?: IntFieldUpdateOperationsInput | number
+    reportCount?: IntFieldUpdateOperationsInput | number
+    isVerifiedPurchase?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutReviewsNestedInput
+    product?: ProductUpdateOneRequiredWithoutReviewsNestedInput
+  }
+
+  export type ReviewUncheckedUpdateWithoutShopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: ReviewUpdateimagesInput | InputJsonValue[]
+    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    moderationComment?: NullableStringFieldUpdateOperationsInput | string | null
+    helpfulCount?: IntFieldUpdateOperationsInput | number
+    reportCount?: IntFieldUpdateOperationsInput | number
+    isVerifiedPurchase?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReviewUncheckedUpdateManyWithoutShopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: ReviewUpdateimagesInput | InputJsonValue[]
+    status?: EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
+    moderationComment?: NullableStringFieldUpdateOperationsInput | string | null
+    helpfulCount?: IntFieldUpdateOperationsInput | number
+    reportCount?: IntFieldUpdateOperationsInput | number
+    isVerifiedPurchase?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

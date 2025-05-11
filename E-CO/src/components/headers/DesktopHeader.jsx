@@ -79,7 +79,7 @@ const DesktopHeader = () => {
         <header className="amazon-header" style={{ backgroundColor: '#FFFFFF' }}>
             <div style={{ backgroundColor: '#F8F9FA', color: '#0635f4', borderBottom: '1px solid #e5e5e5' }} className="py-1">
                 <div className="container-fluid d-flex justify-content-between align-items-center">
-                    <Link to="/sell" className="text-decoration-none d-flex align-items-center" style={{ color: '#000000' }}>
+                    <Link to="/create-shop" className="text-decoration-none d-flex align-items-center" style={{ color: '#000000' }}>
                         <FaStore className="me-1" /> Vendre sur {config.MARKETPLACE_NAME}
                     </Link>
                     <div className="d-flex align-items-center">
